@@ -29,7 +29,7 @@ public class NumBlock extends ParamBlock {
 //        value.setText("1-00dsfi0");
 
         TextView Number = new TextView(MainActivity.sharedInstance.getBaseContext());
-        Number.setText("Number");
+        Number.setText("Num");
         Number.setTextColor(Color.WHITE);
         Number.setTextSize(21);
         return new NumBlock(new View[]{Number, value});

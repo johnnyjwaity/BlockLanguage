@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.InlineBlock;
 import Blocks.ParamBlock;
@@ -39,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);
-                InlineBlock b = (InlineBlock) createMethod.invoke(null, null);
+                Block b = (Block) createMethod.invoke(null, null);
                 b.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if(event.getAction() == MotionEvent.ACTION_UP){
                             RelativeLayout workflow = findViewById(R.id.Workflow);
                             try {
-                                InlineBlock obj = (InlineBlock) createMethod.invoke(null, null);
+                                Block obj = (Block) createMethod.invoke(null, null);
                                 obj.setId(View.generateViewId());
                                 workflow.addView(obj);
                             } catch (IllegalAccessException e) {
