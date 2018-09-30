@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -15,6 +16,10 @@ import java.lang.reflect.Method;
 
 import Blocks.DeclareVariable;
 import Blocks.InlineBlock;
+import Blocks.ParamBlock;
+import Blocks.NumBlock;
+import Blocks.PrintBlock;
+import Blocks.StartBlock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateMenu(){
-        Class[] blocks = {DeclareVariable.class};
+        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);
@@ -55,6 +60,48 @@ public class MainActivity extends AppCompatActivity {
                 });
                 LinearLayout menu = findViewById(R.id.MenuList);
                 menu.addView(b);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
+                params.setMargins(8, 15, 0, 15);
+                b.setLayoutParams(params);
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Class[] paramBlocks = {NumBlock.class};
+        for (Class block : paramBlocks){
+            try {
+                final Method createMethod = block.getMethod("create", null);
+                ParamBlock b = (ParamBlock) createMethod.invoke(null, null);
+                b.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction() == MotionEvent.ACTION_UP){
+                            RelativeLayout workflow = findViewById(R.id.Workflow);
+                            try {
+                                ParamBlock obj = (ParamBlock) createMethod.invoke(null, null);
+                                obj.setId(View.generateViewId());
+                                workflow.addView(obj);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        return true;
+                    }
+                });
+                LinearLayout menu = findViewById(R.id.MenuList);
+                menu.addView(b);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
+                params.setMargins(8, 15, 0, 15);
+                b.setLayoutParams(params);
+
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
