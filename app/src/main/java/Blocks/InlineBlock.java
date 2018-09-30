@@ -12,14 +12,13 @@ package Blocks;
         import com.johnnywaity.blocklanguage.MainActivity;
         import com.johnnywaity.blocklanguage.R;
 
+        import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.Map;
 
 public abstract class InlineBlock extends Block {
 
     private final static float MAX_CLIP_DISTANCE = 50;
-
-
 
     private InlineBlock snappedView = null;
     private InlineBlock parentSnapView = null;
@@ -47,8 +46,6 @@ public abstract class InlineBlock extends Block {
     }
 
     public void snap(){
-
-
         InlineBlock block = this;
         RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
         Map<Float, View> distances = new HashMap<>();
@@ -86,6 +83,7 @@ public abstract class InlineBlock extends Block {
             parentSnapView.setSnappedView(null);
             parentSnapView = null;
         }
-
     }
+
+
 }

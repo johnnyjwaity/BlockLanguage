@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.johnnywaity.blocklanguage.MainActivity;
 import com.johnnywaity.blocklanguage.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public abstract class Block extends RelativeLayout {
     private float lastX;
     private float lastY;
 
+    private ArrayList<ParamBlock> subParamBlocks = new ArrayList<>();
+
     public Block(View[] subviews){
         super(MainActivity.sharedInstance.getBaseContext());
         this.subviews = subviews;
@@ -31,6 +34,7 @@ public abstract class Block extends RelativeLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     public void populate(){
+//        Block block = this;
         this.setBackgroundColor(Color.rgb(255, 153, 0));
         LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 70);
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -82,10 +86,32 @@ public abstract class Block extends RelativeLayout {
     public void setColor(int color){
         this.setBackgroundColor(color);
     }
+    public void setNewLayoutParams(LayoutParams p) { this.setLayoutParams(p); }
 
     public void translate(float x, float y){
+        bringToFront();
         this.setX(this.getX() + x);
         this.setY(this.getY() + y);
+        for (ParamBlock block: subParamBlocks) {
+            block.translate(x, y);
+        }
+    }
+
+    public void removeSubParam(ParamBlock paramB) {
+        if (subParamBlocks.indexOf(paramB) >= 0) {
+            subParamBlocks.remove(paramB);
+            //Code I tried doing to make the width of the parent block ajust to having a new paramter
+//            getLayoutParams().width -= paramB.getWidth()-150;
+//            paramB.getParentEditText().getLayoutParams().width = 150;
+        }
+    }
+
+    public void addSubParam(ParamBlock paramB) {
+        subParamBlocks.add(paramB);
+    }
+
+    public View[] getSubviews() {
+        return subviews;
     }
 
     public abstract void execute();
