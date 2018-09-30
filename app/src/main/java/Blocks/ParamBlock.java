@@ -2,6 +2,7 @@ package Blocks;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.johnnywaity.blocklanguage.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class ParamBlock extends Block {
@@ -28,71 +30,94 @@ public abstract class ParamBlock extends Block {
     private float lastY;
 
     public ParamBlock(View[] subviews){
-        super(subviews);
-        super.setColor(Color.rgb(0, 80, 240));
-        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 70);
-        p.addRule(RelativeLayout.CENTER_IN_PARENT);
-        super.setNewLayoutParams(p);
+        super(subviews, 52);
+        Drawable d = MainActivity.sharedInstance.getDrawable(R.drawable.rounded_rect);
+        d.setTint(Color.rgb(0, 80, 240));
+        super.setBackgroundImage(d);
+        this.setPadding(5 ,0 , 5, 0);
+//        super.setColor(Color.rgb(0, 80, 240));
+//        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 70);
+//        p.addRule(RelativeLayout.CENTER_IN_PARENT);
+//        super.setNewLayoutParams(p);
     }
 
     @Override
     public void snap(){
         ParamBlock block = this;
-        RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
-        Map<Float, ArrayList<View>> distances = new HashMap<>();
-        for(int i = 0; i < workflow.getChildCount(); i++){
-            View child = workflow.getChildAt(i);
-            if(child.equals(block)){
-                continue;
+        Map<Float, ParameterHolder> distances = new HashMap<>();
+        List<ParameterHolder> children = ParameterHolder.getParamHolders();
+        System.out.println("paramHolderAmount " + children.size());
+        for(ParameterHolder child : children){
+            int[] coords = new int[2];
+            child.getLocationInWindow(coords);
+            float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1], 2));
+            if(distance <= MAX_CLIP_DISTANCE){
+                distances.put(distance, child);
             }
-            if(child instanceof Block){
-                for (View subChild: ((Block) child).getSubviews()) {
-                    if (subChild instanceof EditText) {
-                        float distance = (float) Math.sqrt(Math.pow(block.getX() - child.getX()-subChild.getX(), 2) + Math.pow(block.getY() - (subChild.getY()+child.getY()), 2));
-                        if(distance <= MAX_CLIP_DISTANCE){
-                            ArrayList<View> childWithSubChild = new ArrayList<>();
-                            childWithSubChild.add(child);
-                            childWithSubChild.add(subChild);
-                            distances.put(distance, childWithSubChild);
-                        }
-                    }
-                }
-            }
+            System.out.println(distance);
+            System.out.println(coords[0]);
         }
         if(!distances.isEmpty()){
             float closestDistance = (Float) distances.keySet().toArray()[0];
-            ArrayList<View> closestView = distances.get(closestDistance);
+            ParameterHolder closestView = distances.get(closestDistance);
             for(Float distance : distances.keySet()){
                 if(distance < closestDistance){
                     closestDistance = distance;
                     closestView = distances.get(distance);
                 }
             }
+            ViewGroup v = (ViewGroup) block.getParent();
+            v.removeView(block);
 
-            //Code I tried doing for the width of the parent blocks to adust, I couldn't get it working
-//            closestView.get(1).getLayoutParams().width = getWidth();
-//            System.out.println("First: "+closestView.get(0).getWidth()+" "+ closestView.get(0).getX());
-//            closestView.get(0).getLayoutParams().width = closestView.get(0).getWidth()+getWidth()-150;
-//            System.out.println("Second: "+closestView.get(0).getWidth()+" "+ closestView.get(0).getX());
-
-            block.translate(closestView.get(1).getX()+closestView.get(0).getX() - block.getX(), closestView.get(1).getY()+closestView.get(0).getY()-10 - block.getY());
-            Block parentView = (Block) closestView.get(0);
-            parentView.addSubParam(block);
-            parentSnapView = parentView;
-            parentEditText = (EditText) closestView.get(1);
+            ParamBlock newBlock = block.cloneParam();
+            System.out.println("Create Block With Value " + newBlock.getValue().getNumValue());
+            closestView.addView(newBlock);
         }
     }
 
     @Override
     public void breakSnap(){
-        if(parentSnapView != null){
-            parentSnapView.removeSubParam(this);
-            parentSnapView = null;
-            parentEditText = null;
+        RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
+
+        ViewGroup parent = (ViewGroup) this.getParent();
+        if(!parent.equals(workflow)){
+            int[] coords = new int[]{(int)this.getX(), (int)this.getY()};
+//            this.getLocationOnScreen(coords);
+            parent.removeView(this);
+
+            workflow.addView(this);
+            this.setX(coords[0]);
+            this.setY(coords[1]);
         }
+
     }
 
     public EditText getParentEditText() {
         return parentEditText;
     }
+
+    private List<View> getAllChildren(View v) {
+
+        if (!(v instanceof ViewGroup)) {
+            ArrayList<View> viewArrayList = new ArrayList<View>();
+            viewArrayList.add(v);
+            return viewArrayList;
+        }
+
+        ArrayList<View> result = new ArrayList<View>();
+
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+
+            View child = viewGroup.getChildAt(i);
+
+            //Do not add any parents, just add child elements
+            result.addAll(getAllChildren(child));
+        }
+        return result;
+    }
+
+    public abstract ParamBlock cloneParam();
+    public abstract ParamValue getValue();
+    public abstract void setParamValue(ParamValue value);
 }

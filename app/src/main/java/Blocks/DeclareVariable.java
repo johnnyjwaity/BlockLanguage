@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
@@ -40,11 +41,14 @@ public class DeclareVariable extends InlineBlock {
         equalSign.setTextColor(Color.WHITE);
         equalSign.setTextSize(21);
 
-        EditText value = new EditText(MainActivity.sharedInstance.getBaseContext());
-        value.setBackgroundColor(Color.WHITE);
-        LinearLayout.LayoutParams vparams = new LinearLayout.LayoutParams(150, 52);
-        vparams.setMargins(0, 10, 0 , 0);
-        value.setLayoutParams(vparams);
+//        EditText value = new EditText(MainActivity.sharedInstance.getBaseContext());
+//        value.setBackgroundColor(Color.WHITE);
+//        LinearLayout.LayoutParams vparams = new LinearLayout.LayoutParams(150, 52);
+//        vparams.setMargins(0, 10, 0 , 0);
+//        value.setLayoutParams(vparams);
+
+        ParameterHolder value = new ParameterHolder();
+
 
 
         return new DeclareVariable(new View[]{var, varName, equalSign, value});

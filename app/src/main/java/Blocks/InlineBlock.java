@@ -26,11 +26,10 @@ public abstract class InlineBlock extends Block {
 
     @SuppressLint("ClickableViewAccessibility")
     public InlineBlock(View[] subviews){
-        super(subviews);
+        super(subviews, 70);
 
 
     }
-    public abstract void execute();
 
     @Override
     public void translate(float x, float y){
@@ -85,5 +84,6 @@ public abstract class InlineBlock extends Block {
         }
     }
 
+    public abstract void execute();
 
 }

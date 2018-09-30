@@ -2,6 +2,7 @@ package Blocks;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,14 @@ public abstract class Block extends RelativeLayout {
 
     private float lastX;
     private float lastY;
+    private int height;
 
     private ArrayList<ParamBlock> subParamBlocks = new ArrayList<>();
 
-    public Block(View[] subviews){
+    public Block(View[] subviews, int height){
         super(MainActivity.sharedInstance.getBaseContext());
         this.subviews = subviews;
+        this.height = height;
         populate();
     }
 
@@ -36,7 +39,7 @@ public abstract class Block extends RelativeLayout {
     public void populate(){
 //        Block block = this;
         this.setBackgroundColor(Color.rgb(255, 153, 0));
-        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 70);
+        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
         this.setLayoutParams(p);
         LinearLayout layout = new LinearLayout(MainActivity.sharedInstance.getBaseContext());
@@ -46,8 +49,9 @@ public abstract class Block extends RelativeLayout {
 
         ImageView drag = new ImageView(MainActivity.sharedInstance.getBaseContext());
         drag.setImageDrawable(this.getContext().getDrawable(R.drawable.drag));
-        LinearLayout.LayoutParams dragParams = new LinearLayout.LayoutParams(52, 52);
-        dragParams.setMargins(5, 12, 10, 0);
+        LinearLayout.LayoutParams dragParams = new LinearLayout.LayoutParams((int) (0.75 * height), (int) (0.75 * height));
+
+        dragParams.setMargins(((int) (0.07 * height)), 12, 10, 0);
         drag.setLayoutParams(dragParams);
         drag.setAlpha(0.3f);
         drag.setOnTouchListener(new OnTouchListener() {
@@ -86,6 +90,10 @@ public abstract class Block extends RelativeLayout {
     public void setColor(int color){
         this.setBackgroundColor(color);
     }
+    public void setBackgroundImage(Drawable d){
+        this.setBackground(d);
+    }
+
     public void setNewLayoutParams(LayoutParams p) { this.setLayoutParams(p); }
 
     public void translate(float x, float y){
@@ -114,8 +122,10 @@ public abstract class Block extends RelativeLayout {
         return subviews;
     }
 
-    public abstract void execute();
+
     public abstract void snap();
     public abstract void breakSnap();
+
+
 
 }
