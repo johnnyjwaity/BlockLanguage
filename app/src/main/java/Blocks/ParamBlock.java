@@ -45,18 +45,35 @@ public abstract class ParamBlock extends Block {
     public void snap(){
         ParamBlock block = this;
         Map<Float, ParameterHolder> distances = new HashMap<>();
-        List<ParameterHolder> children = ParameterHolder.getParamHolders();
-        System.out.println("paramHolderAmount " + children.size());
-        for(ParameterHolder child : children){
-            int[] coords = new int[2];
-            child.getLocationInWindow(coords);
-            float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1], 2));
-            if(distance <= MAX_CLIP_DISTANCE){
-                distances.put(distance, child);
+//        List<ParameterHolder> children = ParameterHolder.getParamHolders();
+        RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
+//        System.out.println("paramHolderAmount " + children.size());
+
+
+
+        for(int i = 0; i < workflow.getChildCount(); i++) {
+            View child = workflow.getChildAt(i);
+            if (child.equals(block)) {
+                continue;
             }
-            System.out.println(distance);
-            System.out.println(coords[0]);
+            if (child instanceof Block) {
+                for (View view : ((Block) child).getSubviews()) {
+                    System.out.println(view.getClass());
+                    if (view instanceof ParameterHolder) {
+                        System.out.println("Found");
+                        int[] coords = new int[2];
+                        view.getLocationInWindow(coords);
+                        float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1], 2));
+                        if (distance <= MAX_CLIP_DISTANCE) {
+                            distances.put(distance, (ParameterHolder) view);
+                        }
+                        System.out.println(distance);
+                        System.out.println(coords[0]);
+                    }
+                }
+            }
         }
+
         if(!distances.isEmpty()){
             float closestDistance = (Float) distances.keySet().toArray()[0];
             ParameterHolder closestView = distances.get(closestDistance);
@@ -72,6 +89,16 @@ public abstract class ParamBlock extends Block {
             ParamBlock newBlock = block.cloneParam();
             System.out.println("Create Block With Value " + newBlock.getValue().getNumValue());
             closestView.addView(newBlock);
+            boolean foundInlineParent = false;
+            ViewGroup lastView = closestView;
+            while(!foundInlineParent){
+                if(lastView instanceof InlineBlock){
+                    foundInlineParent = true;
+                }else{
+                    lastView = (ViewGroup) lastView.getParent();
+                }
+            }
+            lastView.setX(lastView.getX()+block.getLayoutParams().width/2-closestView.getMinimumWidth());
         }
     }
 

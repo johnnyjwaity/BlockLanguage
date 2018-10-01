@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ParameterHolder extends RelativeLayout {
 
-    private static List<ParameterHolder> paramHolders;
+//    private static List<ParameterHolder> paramHolders;
 
     public ParameterHolder (){
         super(MainActivity.sharedInstance.getBaseContext());
@@ -30,7 +30,7 @@ public class ParameterHolder extends RelativeLayout {
         this.setLayoutParams(valParams);
         this.setMinimumWidth(100);
 //        this.setGravity(Gravity.LEFT);
-        addParamHolder(this);
+//        addParamHolder(this);
 
 
 
@@ -38,21 +38,21 @@ public class ParameterHolder extends RelativeLayout {
 
     }
 
-    public static List<ParameterHolder> getParamHolders() {
-        if(paramHolders == null){
-            paramHolders = new ArrayList<>();
-        }
-        return paramHolders;
-    }
-
-    public static void addParamHolder(ParameterHolder p) {
-        if(paramHolders == null){
-            paramHolders = new ArrayList<>();
-            paramHolders.add(p);
-        }else{
-            paramHolders.add(p);
-        }
-    }
+//    public static List<ParameterHolder> getParamHolders() {
+//        if(paramHolders == null){
+//            paramHolders = new ArrayList<>();
+//        }
+//        return paramHolders;
+//    }
+//
+//    public static void addParamHolder(ParameterHolder p) {
+//        if(paramHolders == null){
+//            paramHolders = new ArrayList<>();
+//            paramHolders.add(p);
+//        }else{
+//            paramHolders.add(p);
+//        }
+//    }
 
 
 
