@@ -39,12 +39,14 @@ public abstract class Block extends RelativeLayout {
     public void populate(){
 //        Block block = this;
         this.setBackgroundColor(Color.rgb(255, 153, 0));
-        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
+        LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setMinimumHeight(height);
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
         this.setLayoutParams(p);
         LinearLayout layout = new LinearLayout(MainActivity.sharedInstance.getBaseContext());
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setMinimumHeight(height);
         this.addView(layout);
 
         ImageView drag = new ImageView(MainActivity.sharedInstance.getBaseContext());

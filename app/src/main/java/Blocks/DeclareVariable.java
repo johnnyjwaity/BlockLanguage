@@ -47,7 +47,7 @@ public class DeclareVariable extends InlineBlock {
 //        vparams.setMargins(0, 10, 0 , 0);
 //        value.setLayoutParams(vparams);
 
-        ParameterHolder value = new ParameterHolder();
+        ParameterHolder value = new ParameterHolder(height);
 
 
 

@@ -19,16 +19,17 @@ public class ParameterHolder extends RelativeLayout {
 
 //    private static List<ParameterHolder> paramHolders;
 
-    public ParameterHolder (){
+    public ParameterHolder (int height){
         super(MainActivity.sharedInstance.getBaseContext());
         Drawable back = MainActivity.sharedInstance.getDrawable(R.drawable.rounded_rect);
         back.setTint(Color.WHITE);
         this.setBackground(back);
-        LinearLayout.LayoutParams valParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 52);
-        valParams.setMargins(0, 10, 0 , 0);
+        LinearLayout.LayoutParams valParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        valParams.setMargins(0, 10, 0 , 10);
         this.setPadding(0, 0 ,0, 0);
         this.setLayoutParams(valParams);
         this.setMinimumWidth(100);
+        this.setMinimumHeight(height - 20);
 //        this.setGravity(Gravity.LEFT);
 //        addParamHolder(this);
 

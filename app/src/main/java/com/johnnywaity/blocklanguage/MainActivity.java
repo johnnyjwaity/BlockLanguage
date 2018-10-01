@@ -21,6 +21,8 @@ import Blocks.ParamBlock;
 import Blocks.NumBlock;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
+import Blocks.TestBlock;
+import Blocks.TestParam;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateMenu(){
-        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class};
+        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, TestBlock.class, TestParam.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);
@@ -73,44 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-//        Class[] paramBlocks = {NumBlock.class};
-//        for (Class block : paramBlocks){
-//            try {
-//                final Method createMethod = block.getMethod("create", null);
-//                ParamBlock b = (ParamBlock) createMethod.invoke(null, null);
-//                b.setOnTouchListener(new View.OnTouchListener() {
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event) {
-//                        if(event.getAction() == MotionEvent.ACTION_UP){
-//                            RelativeLayout workflow = findViewById(R.id.Workflow);
-//                            try {
-//                                ParamBlock obj = (ParamBlock) createMethod.invoke(null, null);
-//                                obj.setId(View.generateViewId());
-//                                workflow.addView(obj);
-//                            } catch (IllegalAccessException e) {
-//                                e.printStackTrace();
-//                            } catch (InvocationTargetException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        return true;
-//                    }
-//                });
-//                LinearLayout menu = findViewById(R.id.MenuList);
-//                menu.addView(b);
-//                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
-//                params.setMargins(8, 15, 0, 15);
-//                b.setLayoutParams(params);
-//
-//            } catch (NoSuchMethodException e) {
-//                e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                e.printStackTrace();
-//            } catch (InvocationTargetException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
 }

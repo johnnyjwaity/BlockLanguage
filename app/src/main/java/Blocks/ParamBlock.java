@@ -28,9 +28,10 @@ public abstract class ParamBlock extends Block {
 
     private float lastX;
     private float lastY;
+    public final static int height = 52;
 
     public ParamBlock(View[] subviews){
-        super(subviews, 52);
+        super(subviews, height);
         Drawable d = MainActivity.sharedInstance.getDrawable(R.drawable.rounded_rect);
         d.setTint(Color.rgb(0, 80, 240));
         super.setBackgroundImage(d);
@@ -85,20 +86,27 @@ public abstract class ParamBlock extends Block {
             }
             ViewGroup v = (ViewGroup) block.getParent();
             v.removeView(block);
-
-            ParamBlock newBlock = block.cloneParam();
-            System.out.println("Create Block With Value " + newBlock.getValue().getNumValue());
-            closestView.addView(newBlock);
-            boolean foundInlineParent = false;
+            int originalBlockWidth = block.getWidth();
+            block.setLeft(0);
+            block.setX(0);
+            block.setTop(0);
+            block.setY(0);
+            closestView.addView(block);
             ViewGroup lastView = closestView;
-            while(!foundInlineParent){
-                if(lastView instanceof InlineBlock){
-                    foundInlineParent = true;
-                }else{
-                    lastView = (ViewGroup) lastView.getParent();
+            Block lastBlock = this;
+            while(true){
+                if (lastView.equals(workflow)){
+                    break;
                 }
+                if(lastView instanceof Block){
+                    lastBlock = (Block) lastView;
+                }
+                lastView = (ViewGroup) lastView.getParent();
             }
-            lastView.setX(lastView.getX()+block.getLayoutParams().width/2-closestView.getMinimumWidth());
+            System.out.println("Width" + originalBlockWidth);
+            float changeInWidth = originalBlockWidth - closestView.getMinimumWidth();
+            lastBlock.setX(lastBlock.getX()+ (changeInWidth / 2));
+
         }
     }
 
@@ -115,7 +123,23 @@ public abstract class ParamBlock extends Block {
             workflow.addView(this);
             this.setX(coords[0]);
             this.setY(coords[1]);
+
+            ViewGroup lastView = parent;
+            Block lastBlock = this;
+            while(true){
+                if (lastView.equals(workflow)){
+                    break;
+                }
+                if(lastView instanceof Block){
+                    lastBlock = (Block) lastView;
+                }
+                lastView = (ViewGroup) lastView.getParent();
+            }
+            float changeInWidth = this.getWidth() - parent.getMinimumWidth();
+            lastBlock.setX(lastBlock.getX() - (changeInWidth / 2));
         }
+
+
 
     }
 

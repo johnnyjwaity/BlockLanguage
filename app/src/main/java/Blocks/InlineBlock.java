@@ -19,6 +19,7 @@ package Blocks;
 public abstract class InlineBlock extends Block {
 
     private final static float MAX_CLIP_DISTANCE = 50;
+    public final static int height = 70;
 
     private InlineBlock snappedView = null;
     private InlineBlock parentSnapView = null;
@@ -26,7 +27,7 @@ public abstract class InlineBlock extends Block {
 
     @SuppressLint("ClickableViewAccessibility")
     public InlineBlock(View[] subviews){
-        super(subviews, 70);
+        super(subviews, height);
 
 
     }
