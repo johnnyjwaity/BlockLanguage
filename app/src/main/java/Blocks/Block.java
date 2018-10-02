@@ -26,8 +26,6 @@ public abstract class Block extends RelativeLayout {
     private float lastY;
     private int height;
 
-    private ArrayList<ParamBlock> subParamBlocks = new ArrayList<>();
-
     public Block(View[] subviews, int height){
         super(MainActivity.sharedInstance.getBaseContext());
         this.subviews = subviews;
@@ -66,9 +64,9 @@ public abstract class Block extends RelativeLayout {
                     translate(event.getRawX() - lastX, event.getRawY() - lastY);
                     lastX = event.getRawX();
                     lastY = event.getRawY();
-                    breakSnap();
                 }
                 else if(event.getAction() == MotionEvent.ACTION_UP){
+                    breakSnap();
                     snap();
                 }
                 return true;
@@ -102,22 +100,7 @@ public abstract class Block extends RelativeLayout {
         bringToFront();
         this.setX(this.getX() + x);
         this.setY(this.getY() + y);
-        for (ParamBlock block: subParamBlocks) {
-            block.translate(x, y);
-        }
-    }
 
-    public void removeSubParam(ParamBlock paramB) {
-        if (subParamBlocks.indexOf(paramB) >= 0) {
-            subParamBlocks.remove(paramB);
-            //Code I tried doing to make the width of the parent block ajust to having a new paramter
-//            getLayoutParams().width -= paramB.getWidth()-150;
-//            paramB.getParentEditText().getLayoutParams().width = 150;
-        }
-    }
-
-    public void addSubParam(ParamBlock paramB) {
-        subParamBlocks.add(paramB);
     }
 
     public View[] getSubviews() {

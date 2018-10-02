@@ -28,8 +28,6 @@ public abstract class InlineBlock extends Block {
     @SuppressLint("ClickableViewAccessibility")
     public InlineBlock(View[] subviews){
         super(subviews, height);
-
-
     }
 
     @Override
@@ -43,6 +41,10 @@ public abstract class InlineBlock extends Block {
 
     public void setSnappedView(InlineBlock snappedView) {
         this.snappedView = snappedView;
+    }
+
+    public InlineBlock getSnappedView() {
+        return snappedView;
     }
 
     public void snap(){
