@@ -16,13 +16,13 @@ import java.lang.reflect.Method;
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
+import Blocks.GetVarBlock;
 import Blocks.InlineBlock;
 import Blocks.ParamBlock;
 import Blocks.NumBlock;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
-import Blocks.TestBlock;
-import Blocks.TestParam;
+import Runtime.Interpreter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +35,27 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         populateMenu();
 
+        Button runButton = findViewById(R.id.runButton);
+        runButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout workflow = findViewById(R.id.Workflow);
+                StartBlock startBlock = null;
+                for(int i = 0; i < workflow.getChildCount(); i ++){
+                    View child = workflow.getChildAt(i);
+                    if(child instanceof StartBlock){
+                        startBlock = (StartBlock) child;
+                    }
+                }
+                Interpreter interpreter = new Interpreter(startBlock);
+                interpreter.run();
+            }
+        });
+
     }
 
     private void populateMenu(){
-        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, TestBlock.class, TestParam.class};
+        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, GetVarBlock.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);

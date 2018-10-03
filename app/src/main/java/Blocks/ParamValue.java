@@ -24,5 +24,16 @@ public class ParamValue {
     public void setStringValue(String stringValue) {
         this.stringValue = stringValue;
     }
+
+    public String getRawValue(){
+        switch(dataType){
+            case Number:
+                return "" + numValue;
+            case String:
+                return stringValue;
+
+        }
+        return null;
+    }
 }
 

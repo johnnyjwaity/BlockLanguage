@@ -10,8 +10,20 @@ import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 
+import Runtime.VariableManager;
+
 
 public class DeclareVariable extends InlineBlock {
+
+    private ParameterHolder variableValue = null;
+    public void setVariableValue(ParameterHolder block){
+        variableValue = block;
+    }
+
+    private EditText variableName = null;
+    public void setVariableName(EditText variableName) {
+        this.variableName = variableName;
+    }
 
     public DeclareVariable(View[] subviews){
         super(subviews);
@@ -21,7 +33,7 @@ public class DeclareVariable extends InlineBlock {
 
     @Override
     public void execute() {
-
+        VariableManager.sharedInstance.setVariable(variableName.getText().toString(), variableValue.getValue());
     }
 
     public static DeclareVariable create(){
@@ -34,23 +46,22 @@ public class DeclareVariable extends InlineBlock {
         varName.setBackgroundColor(Color.WHITE);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 52);
         params.setMargins(0, 10, 0 , 0);
+        varName.setPadding(0, 0, 0, 0);
         varName.setLayoutParams(params);
+        varName.setTextSize(20);
 
         TextView equalSign = new TextView(MainActivity.sharedInstance.getBaseContext());
         equalSign.setText("=");
         equalSign.setTextColor(Color.WHITE);
         equalSign.setTextSize(21);
 
-//        EditText value = new EditText(MainActivity.sharedInstance.getBaseContext());
-//        value.setBackgroundColor(Color.WHITE);
-//        LinearLayout.LayoutParams vparams = new LinearLayout.LayoutParams(150, 52);
-//        vparams.setMargins(0, 10, 0 , 0);
-//        value.setLayoutParams(vparams);
-
         ParameterHolder value = new ParameterHolder(height);
 
 
 
-        return new DeclareVariable(new View[]{var, varName, equalSign, value});
+        DeclareVariable d = new DeclareVariable(new View[]{var, varName, equalSign, value});
+        d.setVariableValue(value);
+        d.setVariableName(varName);
+        return d;
     }
 }

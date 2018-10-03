@@ -64,9 +64,10 @@ public abstract class Block extends RelativeLayout {
                     translate(event.getRawX() - lastX, event.getRawY() - lastY);
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+                    breakSnap();
                 }
                 else if(event.getAction() == MotionEvent.ACTION_UP){
-                    breakSnap();
+
                     snap();
                 }
                 return true;

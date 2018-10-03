@@ -209,7 +209,5 @@ public abstract class ParamBlock extends Block {
         return result;
     }
 
-    public abstract ParamBlock cloneParam();
     public abstract ParamValue getValue();
-    public abstract void setParamValue(ParamValue value);
 }

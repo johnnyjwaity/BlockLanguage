@@ -12,6 +12,12 @@ import com.johnnywaity.blocklanguage.MainActivity;
 
 public class PrintBlock extends InlineBlock {
 
+    private ParameterHolder value;
+
+    public void setValue(ParameterHolder value) {
+        this.value = value;
+    }
+
     public PrintBlock(View[] subviews){
         super(subviews);
 
@@ -20,6 +26,7 @@ public class PrintBlock extends InlineBlock {
 
     @Override
     public void execute() {
+        System.out.println(value.getValue().getRawValue());
 
     }
 
@@ -29,13 +36,10 @@ public class PrintBlock extends InlineBlock {
         var.setTextColor(Color.WHITE);
         var.setTextSize(21);
 
-        EditText value = new EditText(MainActivity.sharedInstance.getBaseContext());
-        value.setBackgroundColor(Color.WHITE);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 52);
-        params.setMargins(0, 10, 0 , 0);
-        value.setLayoutParams(params);
+        ParameterHolder paramHolder = new ParameterHolder(height);
 
-
-        return new PrintBlock(new View[]{var, value});
+        PrintBlock p =  new PrintBlock(new View[]{var, paramHolder});
+        p.setValue(paramHolder);
+        return p;
     }
 }

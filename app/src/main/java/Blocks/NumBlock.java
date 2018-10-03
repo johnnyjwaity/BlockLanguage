@@ -17,6 +17,9 @@ public class NumBlock extends ParamBlock {
 
 
     private EditText editTextValue;
+    public void setEditTextValue(EditText val){
+        editTextValue = val;
+    }
 
 
     public static NumBlock create(){
@@ -25,6 +28,8 @@ public class NumBlock extends ParamBlock {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 30);
         params.setMargins(0, 10, 0 , 0);
         value.setLayoutParams(params);
+        value.setPadding(0, 5, 0, 0);
+        value.setTextSize(18);
 
 //        value.setTextSize(61);
 //        value.setText("1-00dsfi0");
@@ -38,18 +43,10 @@ public class NumBlock extends ParamBlock {
         return n;
     }
 
-    public void setEditTextValue(EditText val){
-        editTextValue = val;
-    }
 
 
-    @Override
-    public ParamBlock cloneParam() {
-        ParamValue val = getValue();
-        NumBlock n = NumBlock.create();
-        n.setParamValue(val);
-        return n;
-    }
+
+
 
     @Override
     public ParamValue getValue() {
@@ -59,11 +56,6 @@ public class NumBlock extends ParamBlock {
         }
         v.setNumValue(Float.parseFloat(editTextValue.getText().toString()));
         return v;
-    }
-
-    @Override
-    public void setParamValue(ParamValue value) {
-        editTextValue.setText("" + value.getNumValue());
     }
 
 }
