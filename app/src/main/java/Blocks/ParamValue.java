@@ -4,6 +4,7 @@ public class ParamValue {
     private DataType dataType;
     private float numValue;
     private String stringValue;
+    private Boolean boolValue;
 
     public ParamValue(DataType dataType) {
         this.dataType = dataType;
@@ -25,15 +26,28 @@ public class ParamValue {
         this.stringValue = stringValue;
     }
 
+    public Boolean getBool() {
+        return boolValue;
+    }
+
+    public void setBoolValue(Boolean boolValue) {
+        this.boolValue = boolValue;
+    }
+
     public String getRawValue(){
         switch(dataType){
             case Number:
                 return "" + numValue;
             case String:
                 return stringValue;
-
+            case Boolean:
+                return ""+boolValue;
         }
         return null;
+    }
+
+    public DataType getDataType() {
+        return dataType;
     }
 }
 

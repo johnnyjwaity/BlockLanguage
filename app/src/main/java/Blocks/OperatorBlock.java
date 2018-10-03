@@ -18,36 +18,37 @@ public class OperatorBlock  extends ParamBlock {
 
 
 
-    private EditText editTextValue;
-    public void setEditTextValue(EditText val){
-        editTextValue = val;
+    private ParameterHolder p1, p2;
+    private Spinner operator;
+
+    public void setP1(ParameterHolder p1) {
+        this.p1 = p1;
     }
 
+    public void setP2(ParameterHolder p2) {
+        this.p2 = p2;
+    }
 
-    public static NumBlock create(){
+    public void setOperator(Spinner operator) {
+        this.operator = operator;
+    }
+
+    public static OperatorBlock create(){
         ParameterHolder value1 = new ParameterHolder(height);
         ParameterHolder value2 = new ParameterHolder(height);
 
         Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
         String[] items = new String[]{"+", "-", "*", "/", "^"};
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80, 52);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 52);
         params.setMargins(0, 0, 0 , 0);
         op.setPadding(0, 0, 0, 0);
         op.setLayoutParams(params);
         op.setAdapter(new ArrayAdapter<String>(MainActivity.sharedInstance, android.R.layout.simple_spinner_dropdown_item, items));
-//        ((TextView)op.getChildAt(0)).setTextSize(20);
-//        op.setTextSize(20);
-
-//        value.setTextSize(61);
-//        value.setText("1-00dsfi0");
-
-//        TextView text = new TextView(MainActivity.sharedInstance.getBaseContext());
-//        text.setText("Num");
-//        text.setTextColor(Color.WHITE);
-//        text.setTextSize(18);
-        NumBlock n = new NumBlock(new View[]{value1, op, value2});
-//        n.setEditTextValue(value);
+        OperatorBlock n = new OperatorBlock(new View[]{value1, op, value2});
+        n.setP1(value1);
+        n.setP2(value2);
+        n.setOperator(op);
         return n;
     }
 
@@ -58,12 +59,24 @@ public class OperatorBlock  extends ParamBlock {
 
     @Override
     public ParamValue getValue() {
-        ParamValue v = new ParamValue(DataType.Number);
-        if(editTextValue.getText().toString().equals("")){
-            editTextValue.setText("0");
+        ParamValue val = p1.getValue();
+        ParamValue val2 = p2.getValue();
+        switch(operator.getSelectedItem().toString()){
+            case "+":
+                switch(val.getDataType()){
+                    case Number:
+                        switch (val2.getDataType()){
+                            case Number:
+                                ParamValue p = new ParamValue(DataType.Number);
+                                p.setNumValue(val.getNumValue() + val2.getNumValue());
+                                return p;
+                        }
+                        break;
+
+                }
+                break;
         }
-        v.setNumValue(Float.parseFloat(editTextValue.getText().toString()));
-        return v;
+        return null;
     }
 
 }

@@ -2,5 +2,6 @@ package Blocks;
 
 public enum DataType {
     String,
-    Number
+    Number,
+    Boolean
 }
