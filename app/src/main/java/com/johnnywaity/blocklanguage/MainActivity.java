@@ -18,10 +18,12 @@ import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.GetVarBlock;
 import Blocks.InlineBlock;
+import Blocks.OperatorBlock;
 import Blocks.ParamBlock;
 import Blocks.NumBlock;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
+import Blocks.StringBlock;
 import Runtime.Interpreter;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateMenu(){
-        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, GetVarBlock.class};
+        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, StringBlock.class, GetVarBlock.class, OperatorBlock.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);
