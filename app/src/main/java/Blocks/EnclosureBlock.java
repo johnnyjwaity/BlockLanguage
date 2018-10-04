@@ -26,7 +26,7 @@ public class EnclosureBlock extends InlineBlock {
                         holder.setMinimumWidth(getWidth());
                     }
                 },
-                2);
+                5);
         this.holder = holder;
 
     }
@@ -66,7 +66,16 @@ public class EnclosureBlock extends InlineBlock {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-//        holder.setMinimumWidth(w);
-        System.out.println("SizeChnage");
+        System.out.println(w);
+        final int width = w;
+//        System.out.println("SizeChnage");
+        holder.setBackgroundColor(Color.rgb((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255)));
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        holder.setMinimumWidth(width);
+                    }
+                },
+                5);
     }
 }

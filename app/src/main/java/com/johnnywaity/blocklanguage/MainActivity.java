@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         populateMenu();
+
+        TextView console = findViewById(R.id.console);
+        console.setVisibility(View.INVISIBLE);
+        findViewById(R.id.MenuList).bringToFront();
 
         Button runButton = findViewById(R.id.runButton);
         runButton.setOnClickListener(new View.OnClickListener() {

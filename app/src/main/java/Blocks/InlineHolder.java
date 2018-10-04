@@ -22,5 +22,6 @@ public class InlineHolder extends RelativeLayout {
     @Override
     public void setMinimumWidth(int minWidth) {
         super.setMinimumWidth(minWidth - 30);
+        super.getLayoutParams().width = minWidth - 30;
     }
 }

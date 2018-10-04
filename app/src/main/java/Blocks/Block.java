@@ -45,7 +45,7 @@ public abstract class Block extends RelativeLayout {
         LinearLayout vLayout = new LinearLayout(MainActivity.sharedInstance.getBaseContext());
         vLayout.setOrientation(LinearLayout.VERTICAL);
         vLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        vLayout.setPadding(0, 10, 0, 30);
+        vLayout.setPadding(0, 10, 0, 10);
 //        vLayout.setGravity(Gravity.RIGHT);
         this.addView(vLayout);
 

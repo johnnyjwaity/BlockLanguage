@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
+import com.johnnywaity.blocklanguage.R;
 
 
 public class PrintBlock extends InlineBlock {
@@ -27,6 +28,8 @@ public class PrintBlock extends InlineBlock {
     @Override
     public void execute() {
         System.out.println(value.getValue().getRawValue());
+        TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
+        console.setText(console.getText().toString() + "\n      " + value.getValue().getRawValue());
 
     }
 

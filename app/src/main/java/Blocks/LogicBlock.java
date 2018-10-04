@@ -37,7 +37,7 @@ public class LogicBlock extends ParamBlock {
         Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
         String[] items = new String[]{"&&", "||", "==", "!=", ">", ">=", "<", "<="};
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 52);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(120, 52);
         params.setMargins(0, 0, 0 , 0);
         op.setPadding(0, 0, 0, 0);
         op.setLayoutParams(params);
