@@ -37,6 +37,9 @@ public class ParamValue {
     public String getRawValue(){
         switch(dataType){
             case Number:
+                if ((float) Math.floor((double)numValue) == numValue) {
+                    return ""+(int) numValue;
+                }
                 return "" + numValue;
             case String:
                 return stringValue;

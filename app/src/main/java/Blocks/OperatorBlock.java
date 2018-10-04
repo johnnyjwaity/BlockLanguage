@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
@@ -52,30 +53,61 @@ public class OperatorBlock  extends ParamBlock {
         return n;
     }
 
-
-
-
-
-
     @Override
     public ParamValue getValue() {
         ParamValue val = p1.getValue();
         ParamValue val2 = p2.getValue();
-        switch(operator.getSelectedItem().toString()){
-            case "+":
-                switch(val.getDataType()){
+
+        switch(val.getDataType()){
+            case Number:
+                switch (val2.getDataType()){
                     case Number:
-                        switch (val2.getDataType()){
-                            case Number:
-                                ParamValue p = new ParamValue(DataType.Number);
+                        ParamValue p = new ParamValue(DataType.Number);
+                        switch(operator.getSelectedItem().toString()){
+                            case "+":
                                 p.setNumValue(val.getNumValue() + val2.getNumValue());
                                 return p;
+                            case "-":
+                                p.setNumValue(val.getNumValue() - val2.getNumValue());
+                                return p;
+                            case "*":
+                                p.setNumValue(val.getNumValue() * val2.getNumValue());
+                                return p;
+                            case "/":
+                                p.setNumValue(val.getNumValue() /+ val2.getNumValue());
+                                return p;
+                            case "^":
+                                p.setNumValue((float) Math.pow(val.getNumValue(), val2.getNumValue()));
+                                return p;
                         }
-                        break;
-
+                    case String:
+                        ParamValue pString = new ParamValue(DataType.String);
+                        pString.setStringValue(val.getRawValue()+val2.getRawValue());
+                        return pString;
                 }
                 break;
+            case String:
+                switch (val2.getDataType()){
+                    case Number:
+                        ParamValue p = new ParamValue(DataType.String);
+                        p.setStringValue(val.getRawValue()+val2.getRawValue());
+                        return p;
+                    case String:
+                        ParamValue pString = new ParamValue(DataType.String);
+                        pString.setStringValue(val.getRawValue()+val2.getRawValue());
+                        return pString;
+                    case Boolean:
+                        ParamValue pBool = new ParamValue(DataType.String);
+                        pBool.setStringValue(val.getRawValue()+val2.getRawValue());
+                        return pBool;
+                }
+                break;
+            case Boolean:
+                ParamValue pString = new ParamValue(DataType.String);
+                pString.setStringValue(val.getRawValue()+val2.getRawValue());
+                return pString;
         }
+
         return null;
     }
 
