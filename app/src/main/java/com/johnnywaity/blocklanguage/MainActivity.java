@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
+import Blocks.EnclosureBlock;
 import Blocks.GetVarBlock;
 import Blocks.InlineBlock;
 import Blocks.OperatorBlock;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateMenu(){
-        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, StringBlock.class, GetVarBlock.class, OperatorBlock.class, TrueBlock.class};
+        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, StringBlock.class, GetVarBlock.class, OperatorBlock.class, TrueBlock.class, EnclosureBlock.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);

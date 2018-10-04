@@ -27,7 +27,6 @@ public class DeclareVariable extends InlineBlock {
 
     public DeclareVariable(View[] subviews){
         super(subviews);
-
     }
 
 

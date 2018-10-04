@@ -3,6 +3,7 @@ package Blocks;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +36,26 @@ public abstract class Block extends RelativeLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     public void populate(){
-//        Block block = this;
         this.setBackgroundColor(Color.rgb(255, 153, 0));
         LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setMinimumHeight(height);
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
         this.setLayoutParams(p);
+
+        LinearLayout vLayout = new LinearLayout(MainActivity.sharedInstance.getBaseContext());
+        vLayout.setOrientation(LinearLayout.VERTICAL);
+        vLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        vLayout.setPadding(0, 10, 0, 30);
+//        vLayout.setGravity(Gravity.RIGHT);
+        this.addView(vLayout);
+
+
         LinearLayout layout = new LinearLayout(MainActivity.sharedInstance.getBaseContext());
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layout.setMinimumHeight(height);
-        this.addView(layout);
+//        layout.setGravity(Gravity.LEFT);
+        vLayout.addView(layout);
 
         ImageView drag = new ImageView(MainActivity.sharedInstance.getBaseContext());
         drag.setImageDrawable(this.getContext().getDrawable(R.drawable.drag));

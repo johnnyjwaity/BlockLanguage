@@ -14,6 +14,7 @@ package Blocks;
 
         import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.List;
         import java.util.Map;
 
 public abstract class InlineBlock extends Block {
@@ -63,6 +64,12 @@ public abstract class InlineBlock extends Block {
                 }
             }
         }
+        for(View child : getAllChildren(workflow)){
+            if(child.equals(block)){
+                continue;
+            }
+//            if(child instanceof InlineBlock || )
+        }
         if(!distances.isEmpty()){
             float closestDistance = (Float) distances.keySet().toArray()[0];
             View closestView = distances.get(closestDistance);
@@ -85,6 +92,28 @@ public abstract class InlineBlock extends Block {
             parentSnapView.setSnappedView(null);
             parentSnapView = null;
         }
+    }
+
+    private List<View> getAllChildren(View v) {
+
+        if (!(v instanceof ViewGroup)) {
+            ArrayList<View> viewArrayList = new ArrayList<View>();
+            viewArrayList.add(v);
+            return viewArrayList;
+        }
+
+        ArrayList<View> result = new ArrayList<View>();
+        result.add(v);
+
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+
+            View child = viewGroup.getChildAt(i);
+
+            //Do not add any parents, just add child elements
+            result.addAll(getAllChildren(child));
+        }
+        return result;
     }
 
     public abstract void execute();
