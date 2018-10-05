@@ -52,23 +52,32 @@ public abstract class InlineBlock extends Block {
         InlineBlock block = this;
         RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
         Map<Float, View> distances = new HashMap<>();
-        for(int i = 0; i < workflow.getChildCount(); i++){
-            View child = workflow.getChildAt(i);
-            if(child.equals(block)){
-                continue;
-            }
-            if(child instanceof InlineBlock){
-                float distance = (float) Math.sqrt(Math.pow(block.getX() - child.getX(), 2) + Math.pow(block.getY() - (child.getY() + (child.getHeight() * child.getScaleY())), 2));
-                if(distance <= MAX_CLIP_DISTANCE){
-                    distances.put(distance, child);
-                }
-            }
-        }
+//        for(int i = 0; i < workflow.getChildCount(); i++){
+//            View child = workflow.getChildAt(i);
+//            if(child.equals(block)){
+//                continue;
+//            }
+//            if(child instanceof InlineBlock){
+//                float distance = (float) Math.sqrt(Math.pow(block.getX() - child.getX(), 2) + Math.pow(block.getY() - (child.getY() + (child.getHeight() * child.getScaleY())), 2));
+//                if(distance <= MAX_CLIP_DISTANCE){
+//                    distances.put(distance, child);
+//                }
+//            }
+//        }
         for(View child : getAllChildren(workflow)){
             if(child.equals(block)){
                 continue;
             }
-//            if(child instanceof InlineBlock || )
+            if(child instanceof InlineBlock){
+                int[] coords = new int[2];
+                child.getLocationOnScreen(coords);
+                int childX = coords[0];
+                int childY = coords[1];
+                float distance = (float) Math.sqrt(Math.pow(block.getX() - childX, 2) + Math.pow(block.getY() - (childY + (child.getHeight() * child.getScaleY())), 2));
+                if(distance <= MAX_CLIP_DISTANCE){
+                    distances.put(distance, child);
+                }
+            }
         }
         if(!distances.isEmpty()){
             float closestDistance = (Float) distances.keySet().toArray()[0];
@@ -79,10 +88,16 @@ public abstract class InlineBlock extends Block {
                     closestView = distances.get(distance);
                 }
             }
-            block.translate(closestView.getX() - block.getX(), closestView.getY() + (closestView.getHeight() - block.getY()));
-            InlineBlock parentView = (InlineBlock) closestView;
-            parentView.setSnappedView(block);
-            parentSnapView = parentView;
+            if(closestView instanceof InlineBlock){
+                int[] coords = new int[2];
+                closestView.getLocationOnScreen(coords);
+                block.translate(coords[0] - block.getX(), coords[1] + (closestView.getHeight() - block.getY()));
+                block.translate(0, -(((float)block.getHeight()) / 2) - 3);
+                InlineBlock parentView = (InlineBlock) closestView;
+                parentView.setSnappedView(block);
+                parentSnapView = parentView;
+            }
+
         }
     }
 

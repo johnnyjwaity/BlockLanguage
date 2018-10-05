@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.EnclosureBlock;
+import Blocks.FollowBlock;
 import Blocks.GetVarBlock;
 import Blocks.InlineBlock;
 import Blocks.LogicBlock;

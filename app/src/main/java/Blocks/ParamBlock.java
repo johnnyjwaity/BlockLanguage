@@ -133,6 +133,14 @@ public abstract class ParamBlock extends Block {
                         if (view instanceof InlineBlock && ((InlineBlock) view).getSnappedView() != null) {
                             ((InlineBlock) view).getSnappedView().translate(0, changeInHeight);
                         }
+                        if(view instanceof EnclosureBlock){
+                            System.out.println("Found enclosure");
+                            EnclosureBlock eBlock = (EnclosureBlock) view;
+                            if(eBlock.getHolder().getFollowBlock().getSnappedView() != null){
+                                eBlock.getHolder().getFollowBlock().getSnappedView().translate(0, changeInHeight);
+                                System.out.println("Chnaged!!!");
+                            }
+                        }
 
                     }
                 },
@@ -175,8 +183,11 @@ public abstract class ParamBlock extends Block {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
+
+                        System.out.println(view.getClass());
                         view.setX(coords[0]);
                         view.setY(coords[1]);
+
 
                     }
                 },
