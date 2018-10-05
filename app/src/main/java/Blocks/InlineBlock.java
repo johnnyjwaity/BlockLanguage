@@ -70,10 +70,11 @@ public abstract class InlineBlock extends Block {
             }
             if(child instanceof InlineBlock){
                 int[] coords = new int[2];
-                child.getLocationOnScreen(coords);
+                child.getLocationInWindow(coords);
                 int childX = coords[0];
                 int childY = coords[1];
-                float distance = (float) Math.sqrt(Math.pow(block.getX() - childX, 2) + Math.pow(block.getY() - (childY + (child.getHeight() * child.getScaleY())), 2));
+//                float distance = (float) Math.sqrt(Math.pow(block.getX() - childX, 2) + Math.pow(block.getY() - (childY + (child.getHeight() * child.getScaleY())), 2));
+                float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1] - child.getHeight(), 2));
                 if(distance <= MAX_CLIP_DISTANCE){
                     distances.put(distance, child);
                 }
@@ -92,7 +93,8 @@ public abstract class InlineBlock extends Block {
                 int[] coords = new int[2];
                 closestView.getLocationOnScreen(coords);
                 block.translate(coords[0] - block.getX(), coords[1] + (closestView.getHeight() - block.getY()));
-                block.translate(0, -(((float)block.getHeight()) / 2) - 3);
+//                block.translate(0, -(((float)block.getHeight()) / 2) - 3);
+                block.translate(0, -49);
                 InlineBlock parentView = (InlineBlock) closestView;
                 parentView.setSnappedView(block);
                 parentSnapView = parentView;
@@ -104,7 +106,9 @@ public abstract class InlineBlock extends Block {
     @Override
     public void breakSnap(){
         if(parentSnapView != null){
-            parentSnapView.setSnappedView(null);
+            if(this.equals(parentSnapView.getSnappedView())){
+                parentSnapView.setSnappedView(null);
+            }
             parentSnapView = null;
         }
     }

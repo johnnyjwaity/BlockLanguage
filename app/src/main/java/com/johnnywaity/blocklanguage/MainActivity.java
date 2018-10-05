@@ -20,6 +20,7 @@ import Blocks.DeclareVariable;
 import Blocks.EnclosureBlock;
 import Blocks.FollowBlock;
 import Blocks.GetVarBlock;
+import Blocks.IfBlock;
 import Blocks.InlineBlock;
 import Blocks.LogicBlock;
 import Blocks.OperatorBlock;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateMenu(){
         Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, StringBlock.class,
-                GetVarBlock.class, OperatorBlock.class, LogicBlock.class, TrueBlock.class, EnclosureBlock.class};
+                GetVarBlock.class, OperatorBlock.class, LogicBlock.class, TrueBlock.class, IfBlock.class};
         for (Class block : blocks){
             try {
                 final Method createMethod = block.getMethod("create", null);
