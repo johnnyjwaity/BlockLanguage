@@ -44,6 +44,13 @@ public abstract class ParamBlock extends Block {
     }
 
     @Override
+    public void setColor(int color) {
+        Drawable d = getBackground();
+        d.setTint(color);
+        setBackgroundImage(d);
+    }
+
+    @Override
     public void snap(){
         ParamBlock block = this;
         Map<Float, ParameterHolder> distances = new HashMap<>();

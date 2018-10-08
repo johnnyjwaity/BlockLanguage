@@ -8,13 +8,27 @@ import com.johnnywaity.blocklanguage.MainActivity;
 
 public class IfBlock extends EnclosureBlock {
 
+    private ParameterHolder boolValue;
+    private boolean evaledValue = false;
+
+    public void setBoolValue(ParameterHolder boolValue) {
+        this.boolValue = boolValue;
+    }
+
     public IfBlock(View[] subviews) {
         super(subviews);
     }
 
     @Override
     public void execute() {
+        if(boolValue.getValue().getBool()){
+            executeInside();
+            evaledValue = true;
+        }
+    }
 
+    public boolean getEvaledValue() {
+        return evaledValue;
     }
 
     public static IfBlock create(){
@@ -24,6 +38,8 @@ public class IfBlock extends EnclosureBlock {
         var.setTextSize(21);
 
         ParameterHolder parameterHolder = new ParameterHolder(height);
-        return new IfBlock(new View[]{var, parameterHolder});
+        IfBlock b =  new IfBlock(new View[]{var, parameterHolder});
+        b.setBoolValue(parameterHolder);
+        return b;
     }
 }

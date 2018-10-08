@@ -12,6 +12,7 @@ public class TrueBlock extends ParamBlock{
 
     public TrueBlock(View[] subviews){
         super(subviews);
+        setColor(Color.rgb(186,85,211));
     };
 
     public static TrueBlock create(){

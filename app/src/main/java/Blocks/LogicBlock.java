@@ -1,5 +1,6 @@
 package Blocks;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ public class LogicBlock extends ParamBlock {
 
     public LogicBlock(View[] subviews){
         super(subviews);
+        setColor(Color.rgb(186,85,211));
     }
 
 
@@ -68,9 +70,18 @@ public class LogicBlock extends ParamBlock {
             case "!=":
                 p.setBoolValue(val.getBool() != val2.getBool());
                 return p;
-//            case ">":
-//                p.setBoolValue(val.getBool() > val2.getBool());
-//                return p;
+            case "<":
+                p.setBoolValue(val.getNumValue() < val2.getNumValue());
+                return p;
+            case ">":
+                p.setBoolValue(val.getNumValue() > val2.getNumValue());
+                return p;
+            case "<=":
+                p.setBoolValue(val.getNumValue() <= val2.getNumValue());
+                return p;
+            case ">=":
+                p.setBoolValue(val.getNumValue() >= val2.getNumValue());
+                return p;
         }
         return null;
     }

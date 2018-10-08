@@ -36,6 +36,14 @@ public abstract class EnclosureBlock extends InlineBlock {
 
     }
 
+    public void executeInside(){
+        InlineBlock lastBlock = holder.getFollowBlock();
+        while(lastBlock.getSnappedView() != null){
+            lastBlock = lastBlock.getSnappedView();
+            lastBlock.execute();
+        }
+    }
+
 
 
 
