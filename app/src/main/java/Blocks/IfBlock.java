@@ -24,6 +24,8 @@ public class IfBlock extends EnclosureBlock {
         if(boolValue.getValue().getBool()){
             executeInside();
             evaledValue = true;
+        } else {
+            evaledValue = false;
         }
     }
 

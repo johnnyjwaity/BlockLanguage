@@ -14,11 +14,12 @@ import android.widget.RelativeLayout;
 import com.johnnywaity.blocklanguage.MainActivity;
 import com.johnnywaity.blocklanguage.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Block extends RelativeLayout {
+public abstract class Block extends RelativeLayout implements Serializable{
 
 
     private View[] subviews;

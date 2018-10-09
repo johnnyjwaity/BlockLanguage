@@ -39,7 +39,7 @@ public class OperatorBlock  extends ParamBlock {
         ParameterHolder value2 = new ParameterHolder(height);
 
         Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
-        String[] items = new String[]{"+", "-", "*", "/", "^"};
+        String[] items = new String[]{"+", "-", "*", "/", "%", "^"};
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 52);
         params.setMargins(0, 0, 0 , 0);
@@ -74,7 +74,10 @@ public class OperatorBlock  extends ParamBlock {
                                 p.setNumValue(val.getNumValue() * val2.getNumValue());
                                 return p;
                             case "/":
-                                p.setNumValue(val.getNumValue() /+ val2.getNumValue());
+                                p.setNumValue(val.getNumValue() / val2.getNumValue());
+                                return p;
+                            case "%":
+                                p.setNumValue(val.getNumValue() % val2.getNumValue());
                                 return p;
                             case "^":
                                 p.setNumValue((float) Math.pow(val.getNumValue(), val2.getNumValue()));

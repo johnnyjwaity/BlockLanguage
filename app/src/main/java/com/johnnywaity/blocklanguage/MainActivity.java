@@ -1,6 +1,7 @@
 package com.johnnywaity.blocklanguage;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +13,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import android.util.Log;
+
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
@@ -64,9 +81,103 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Interpreter interpreter = new Interpreter(startBlock);
                 interpreter.run();
+
+//                ArrayList<Block> blocks = new ArrayList<>();
+//                for (View child: getAllChildren(findViewById(R.id.Workflow))) {
+//                    if (child instanceof Block) {
+//                        blocks.add((Block) child);
+//                    }
+//                }
+
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                writeToFile(((TextView)findViewById(R.id.console)).getText(), sharedInstance);
+                                System.out.println(readFromFile(sharedInstance));
+                            }
+                        },
+                        5);
             }
         });
 
+    }
+
+    public void clickConsole(View view) {
+        final TextView console = findViewById(R.id.console);
+        console.setVisibility(View.VISIBLE);
+        console.setText(readFromFile(sharedInstance));
+        console.bringToFront();
+
+        new android.os.Handler().postDelayed(
+            new Runnable() {
+                public void run() {
+                    sharedInstance.findViewById(R.id.MenuList).bringToFront();
+                    console.setVisibility(View.INVISIBLE);
+                }
+            },
+            5000);
+    }
+
+
+
+    private void writeToFile(Object data, Context context) {
+        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
+//            outputStreamWriter.write(data);
+//            outputStreamWriter.close();
+            FileOutputStream fos = context.openFileOutput("config.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(data);
+            os.close();
+            fos.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private String readFromFile(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput("config.txt");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            String simpleClass = (String) is.readObject();
+            is.close();
+            fis.close();
+            return simpleClass;
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        } catch (ClassNotFoundException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+        return null;
+
+//        String ret = "";
+//
+//        try {
+//            InputStream inputStream = context.openFileInput("config.txt");
+//
+//            if ( inputStream != null ) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                String receiveString = "";
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                while ( (receiveString = bufferedReader.readLine()) != null ) {
+//                    System.out.println("Line: "+receiveString);
+//                    stringBuilder.append(receiveString);
+//                }
+//
+//                inputStream.close();
+//                ret = stringBuilder.toString();
+//            }
+//        }
+//        catch (FileNotFoundException e) {
+//            Log.e("login activity", "File not found: " + e.toString());
+//        } catch (IOException e) {
+//            Log.e("login activity", "Can not read file: " + e.toString());
+//        }
+//
+//        return ret;
     }
 
     private void populateMenu(){
@@ -110,4 +221,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private List<View> getAllChildren(View v) {
+
+        if (!(v instanceof ViewGroup)) {
+            ArrayList<View> viewArrayList = new ArrayList<View>();
+            viewArrayList.add(v);
+            return viewArrayList;
+        }
+
+        ArrayList<View> result = new ArrayList<View>();
+        result.add(v);
+
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+
+            View child = viewGroup.getChildAt(i);
+
+            //Do not add any parents, just add child elements
+            result.addAll(getAllChildren(child));
+        }
+        return result;
+    }
 }
