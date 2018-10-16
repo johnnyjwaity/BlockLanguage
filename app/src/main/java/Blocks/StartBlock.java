@@ -24,4 +24,9 @@ public class StartBlock extends InlineBlock {
         start.setTextSize(21);
         return new StartBlock(new View[]{start});
     }
+
+    @Override
+    public String getJSValue() {
+        return "";
+    }
 }

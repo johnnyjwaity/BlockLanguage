@@ -39,6 +39,8 @@ public class FollowBlock extends InlineBlock {
 
     }
 
-
-
+    @Override
+    public String getJSValue() {
+        return "";
+    }
 }

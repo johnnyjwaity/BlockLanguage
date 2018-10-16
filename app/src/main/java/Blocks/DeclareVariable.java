@@ -35,6 +35,11 @@ public class DeclareVariable extends InlineBlock {
         VariableManager.sharedInstance.setVariable(variableName.getText().toString(), variableValue.getValue());
     }
 
+    @Override
+    public String getJSValue() {
+        return "var " + variableName.getText().toString() + " = " + variableValue.getJSValue() + ";";
+    }
+
     public static DeclareVariable create(){
         TextView var = new TextView(MainActivity.sharedInstance.getBaseContext());
         var.setText("var");

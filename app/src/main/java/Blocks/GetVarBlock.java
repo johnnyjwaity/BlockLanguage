@@ -54,4 +54,9 @@ public class GetVarBlock extends ParamBlock {
 
         return VariableManager.sharedInstance.getVariable(editTextValue.getText().toString());
     }
+
+    @Override
+    public String getJSValue() {
+        return editTextValue.getText().toString();
+    }
 }

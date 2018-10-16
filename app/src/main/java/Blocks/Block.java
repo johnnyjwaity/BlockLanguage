@@ -123,6 +123,6 @@ public abstract class Block extends RelativeLayout implements Serializable{
     public abstract void snap();
     public abstract void breakSnap();
 
-
+    public abstract String getJSValue();
 
 }

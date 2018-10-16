@@ -44,4 +44,9 @@ public class IfBlock extends EnclosureBlock {
         b.setBoolValue(parameterHolder);
         return b;
     }
+
+    @Override
+    public String getJSValue() {
+        return "";
+    }
 }

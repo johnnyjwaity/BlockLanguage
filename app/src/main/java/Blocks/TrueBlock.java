@@ -31,4 +31,8 @@ public class TrueBlock extends ParamBlock{
         return v;
     }
 
+    @Override
+    public String getJSValue() {
+        return "true";
+    }
 }

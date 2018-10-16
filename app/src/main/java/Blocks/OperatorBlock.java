@@ -114,4 +114,12 @@ public class OperatorBlock  extends ParamBlock {
         return null;
     }
 
+
+    @Override
+    public String getJSValue() {
+        if(operator.getSelectedItem().toString().equals("^")){
+            return "Math.pow(" + p1.getJSValue() + ", " + p2.getJSValue() + ")";
+        }
+        return p1.getJSValue() + " " + operator.getSelectedItem().toString() + " " + p2.getJSValue();
+    }
 }

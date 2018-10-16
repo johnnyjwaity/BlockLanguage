@@ -45,4 +45,9 @@ public class PrintBlock extends InlineBlock {
         p.setValue(paramHolder);
         return p;
     }
+
+    @Override
+    public String getJSValue() {
+        return "print(" + value.getJSValue() + ");";
+    }
 }

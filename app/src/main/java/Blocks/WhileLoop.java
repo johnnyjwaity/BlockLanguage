@@ -35,4 +35,9 @@ public class WhileLoop extends EnclosureBlock {
         b.setBoolValue(parameterHolder);
         return b;
     }
+
+    @Override
+    public String getJSValue() {
+        return "";
+    }
 }

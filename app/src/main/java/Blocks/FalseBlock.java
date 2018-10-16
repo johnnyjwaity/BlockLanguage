@@ -27,4 +27,9 @@ public class FalseBlock extends ParamBlock{
         v.setBoolValue(false);
         return v;
     }
+
+    @Override
+    public String getJSValue() {
+        return "false";
+    }
 }

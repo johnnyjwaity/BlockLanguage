@@ -67,6 +67,18 @@ public class ParameterHolder extends RelativeLayout {
         return paramBlock.getValue();
     }
 
+    public String getJSValue(){
+        ParamBlock paramBlock = null;
+        for(int i = 0; i < this.getChildCount(); i++){
+            View child = getChildAt(i);
+            if(child instanceof ParamBlock){
+                paramBlock = (ParamBlock) child;
+                break;
+            }
+        }
+        return paramBlock.getJSValue();
+    }
+
 
 
 }

@@ -58,4 +58,8 @@ public class NumBlock extends ParamBlock {
         return v;
     }
 
+    @Override
+    public String getJSValue() {
+        return editTextValue.getText().toString();
+    }
 }

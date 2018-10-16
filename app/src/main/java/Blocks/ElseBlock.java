@@ -16,6 +16,11 @@ public class ElseBlock extends EnclosureBlock {
         executeInside();
     }
 
+    @Override
+    public String getJSValue() {
+        return null;
+    }
+
     public static ElseBlock create(){
         TextView var = new TextView(MainActivity.sharedInstance.getBaseContext());
         var.setText("else");

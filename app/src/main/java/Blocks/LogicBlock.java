@@ -86,4 +86,8 @@ public class LogicBlock extends ParamBlock {
         return null;
     }
 
+    @Override
+    public String getJSValue() {
+        return p1.getJSValue() + " " + operator.getSelectedItem().toString() + " " + p2.getJSValue();
+    }
 }

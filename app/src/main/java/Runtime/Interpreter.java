@@ -33,49 +33,41 @@ public class Interpreter {
 //            e.printStackTrace();
 //        }
 
+
+
+        long timeStart = System.currentTimeMillis();
+        final TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
+        console.setVisibility(View.VISIBLE);
+        console.setText("");
+        console.bringToFront();
+        InlineBlock currentBlock = startBlock;
+        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a;}";
+        while(currentBlock.getSnappedView() != null){
+            currentBlock = currentBlock.getSnappedView();
+            executeStr += currentBlock.getJSValue();
+
+        }
+        executeStr += "PRINT_STR";
+        System.out.println(executeStr);
         Context rhino = Context.enter();
         rhino.setOptimizationLevel(-1);
         rhino.setLanguageVersion(Context.VERSION_1_2);
         Scriptable scope = rhino.initStandardObjects();
-        Object res = rhino.evaluateString(scope, "function blah(){return 5;}var a = 1; a = a + blah(); a", "<cmd>", 1, null);
+        Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
         System.out.println(Context.toString(res));
 
-//        long timeStart = System.currentTimeMillis();
-//        VariableManager varManager = new VariableManager();
-//        final TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
-//        console.setVisibility(View.VISIBLE);
-//        console.setText("");
-//        console.bringToFront();
-//        InlineBlock currentBlock = startBlock;
-//        InlineBlock lastBlock = null;
-//        while(currentBlock.getSnappedView() != null){
-//            lastBlock = currentBlock;
-//            currentBlock = currentBlock.getSnappedView();
-//            if(currentBlock instanceof ElseBlock){
-//                System.out.println("Last " + lastBlock.getClass());
-//                if(lastBlock instanceof IfBlock){
-//                    System.out.println(((IfBlock) lastBlock).getEvaledValue());
-//                    if(!((IfBlock) lastBlock).getEvaledValue()){
-//                        currentBlock.execute();
-//                        System.out.println("Executed");
-//                    }
-//                }
-//            }else{
-//                currentBlock.execute();
-//            }
-//
-//        }
-//        timeStart = System.currentTimeMillis() - timeStart;
-//        console.setText(console.getText() + "\n\n      Time Ran: " + ((float)timeStart)/1000 + "s");
-//
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        MainActivity.sharedInstance.findViewById(R.id.MenuList).bringToFront();
-//                        console.setVisibility(View.INVISIBLE);
-//                    }
-//                },
-//                5000);
+
+        timeStart = System.currentTimeMillis() - timeStart;
+        console.setText(console.getText() + "\n\n      Time Ran: " + ((float)timeStart)/1000 + "s");
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        MainActivity.sharedInstance.findViewById(R.id.MenuList).bringToFront();
+                        console.setVisibility(View.INVISIBLE);
+                    }
+                },
+                5000);
     }
 
 
