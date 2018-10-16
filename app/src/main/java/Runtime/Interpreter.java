@@ -6,6 +6,9 @@ import android.widget.TextView;
 import com.johnnywaity.blocklanguage.MainActivity;
 import com.johnnywaity.blocklanguage.R;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -16,6 +19,7 @@ import Blocks.InlineBlock;
 
 public class Interpreter {
     private InlineBlock startBlock;
+    public static ScriptEngine scriptEngine;
 
     public Interpreter(InlineBlock startBlock) {
         this.startBlock = startBlock;
@@ -24,11 +28,17 @@ public class Interpreter {
     public void run(){
 //        ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
 //        try {
-//            engine.eval("print('Hello World');");
+//            scriptEngine.eval("print('Hello World');");
 //        } catch (ScriptException e) {
 //            e.printStackTrace();
 //        }
 
+        Context rhino = Context.enter();
+        rhino.setOptimizationLevel(-1);
+        rhino.setLanguageVersion(Context.VERSION_1_2);
+        Scriptable scope = rhino.initStandardObjects();
+        Object res = rhino.evaluateString(scope, "function blah(){return 5;}var a = 1; a = a + blah(); a", "<cmd>", 1, null);
+        System.out.println(Context.toString(res));
 
 //        long timeStart = System.currentTimeMillis();
 //        VariableManager varManager = new VariableManager();

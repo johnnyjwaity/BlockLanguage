@@ -32,6 +32,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptEngineManager;
+
 import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.ElseBlock;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedInstance = this;
+        Interpreter.scriptEngine = new ScriptEngineManager().getEngineByName("rhino");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
