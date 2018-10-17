@@ -18,7 +18,7 @@ public class ElseBlock extends EnclosureBlock {
 
     @Override
     public String getJSValue() {
-        return null;
+        return "else{"+getInsideJS()+"}";
     }
 
     public static ElseBlock create(){

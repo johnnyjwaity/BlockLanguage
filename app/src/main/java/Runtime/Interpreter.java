@@ -41,7 +41,7 @@ public class Interpreter {
         console.setText("");
         console.bringToFront();
         InlineBlock currentBlock = startBlock;
-        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a;}";
+        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += '      ' + a + '\\n';}";
         while(currentBlock.getSnappedView() != null){
             currentBlock = currentBlock.getSnappedView();
             executeStr += currentBlock.getJSValue();
@@ -55,10 +55,10 @@ public class Interpreter {
         Scriptable scope = rhino.initStandardObjects();
         Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
         System.out.println(Context.toString(res));
-
+        String result = Context.toString(res);
 
         timeStart = System.currentTimeMillis() - timeStart;
-        console.setText(console.getText() + "\n\n      Time Ran: " + ((float)timeStart)/1000 + "s");
+        console.setText(result + "\n      Time Ran: " + ((float)timeStart)/1000 + "s");
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

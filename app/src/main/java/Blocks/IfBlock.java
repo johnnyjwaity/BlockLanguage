@@ -47,6 +47,6 @@ public class IfBlock extends EnclosureBlock {
 
     @Override
     public String getJSValue() {
-        return "";
+        return "if(" + boolValue.getJSValue() + "){" + getInsideJS() + "}";
     }
 }

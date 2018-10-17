@@ -44,6 +44,16 @@ public abstract class EnclosureBlock extends InlineBlock {
         }
     }
 
+    public String getInsideJS(){
+        String total = "";
+        InlineBlock lastBlock = holder.getFollowBlock();
+        while(lastBlock.getSnappedView() != null){
+            lastBlock = lastBlock.getSnappedView();
+            total += lastBlock.getJSValue();
+        }
+        return total;
+    }
+
 
 
 

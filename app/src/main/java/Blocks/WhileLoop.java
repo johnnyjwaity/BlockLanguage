@@ -38,6 +38,6 @@ public class WhileLoop extends EnclosureBlock {
 
     @Override
     public String getJSValue() {
-        return "";
+        return "while(" + boolValue.getJSValue() + "){" + getInsideJS() + "}";
     }
 }
