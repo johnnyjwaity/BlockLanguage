@@ -21,28 +21,12 @@ public abstract class EnclosureBlock extends InlineBlock {
 
         final InlineHolder holder = new InlineHolder();
         ((ViewGroup)getChildAt(0)).addView(holder);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        holder.setMinimumWidth(getWidth());
-                    }
-                },
-                5);
         this.holder = holder;
         FollowThread followThread = new FollowThread(holder, this);
         followThread.start();
-
-
-
     }
 
-    public void executeInside(){
-        InlineBlock lastBlock = holder.getFollowBlock();
-        while(lastBlock.getSnappedView() != null){
-            lastBlock = lastBlock.getSnappedView();
-            lastBlock.execute();
-        }
-    }
+
 
     public String getInsideJS(){
         String total = "";
@@ -54,37 +38,11 @@ public abstract class EnclosureBlock extends InlineBlock {
         return total;
     }
 
-
-
-
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-//        System.out.println("SizeChnage");
-//        holder.setBackgroundColor(Color.rgb((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255)));
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        holder.setMinimumWidth(0);
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        holder.setMinimumWidth(getWidth());
-                                    }
-                                },
-                                5);
-                    }
-                },
-                5);
-    }
-
     @Override
     public void translate(float x, float y) {
         super.translate(x, y);
         holder.translate(x, y);
     }
-
     public InlineHolder getHolder() {
         return holder;
     }
@@ -121,15 +79,10 @@ public abstract class EnclosureBlock extends InlineBlock {
                             if(block.getSnappedView() != null){
                                 block.getSnappedView().translate(0, -difference);
                             }
-
                         }
                     });
                 }
-
-
             }
         }
-
-
     }
 }

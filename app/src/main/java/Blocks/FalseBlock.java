@@ -21,12 +21,7 @@ public class FalseBlock extends ParamBlock{
         return n;
     }
 
-    @Override
-    public ParamValue getValue() {
-        ParamValue v = new ParamValue(DataType.Boolean);
-        v.setBoolValue(false);
-        return v;
-    }
+
 
     @Override
     public String getJSValue() {

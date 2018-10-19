@@ -17,13 +17,6 @@ public class WhileLoop extends EnclosureBlock {
         super(subviews);
     }
 
-    @Override
-    public void execute() {
-        while (boolValue.getValue().getBool()){
-            executeInside();
-        }
-    }
-
     public static WhileLoop create(){
         TextView var = new TextView(MainActivity.sharedInstance.getBaseContext());
         var.setText("while");

@@ -11,10 +11,6 @@ public class ElseBlock extends EnclosureBlock {
         super(subviews);
     }
 
-    @Override
-    public void execute() {
-        executeInside();
-    }
 
     @Override
     public String getJSValue() {

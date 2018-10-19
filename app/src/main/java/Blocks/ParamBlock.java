@@ -62,7 +62,6 @@ public abstract class ParamBlock extends Block {
         List<View> allChildren = getAllChildren(workflow);
         for (View view: allChildren) {
             if (view instanceof ParameterHolder) {
-//                        System.out.println("Found");
                 int[] coords = new int[2];
                 view.getLocationInWindow(coords);
                 float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1]+50, 2));
@@ -73,28 +72,6 @@ public abstract class ParamBlock extends Block {
 //                System.out.println(coords[0]);
             }
         }
-//        for(int i = 0; i < workflow.getChildCount(); i++) {
-//            View child = workflow.getChildAt(i);
-//            if (child.equals(block)) {
-//                continue;
-//            }
-//            if (child instanceof Block) {
-//                for (View view : ((Block) child).getSubviews()) {
-////                    System.out.println(view.getClass());
-//                    if (view instanceof ParameterHolder) {
-////                        System.out.println("Found");
-//                        int[] coords = new int[2];
-//                        view.getLocationInWindow(coords);
-//                        float distance = (float) Math.sqrt(Math.pow(block.getX() - coords[0], 2) + Math.pow(block.getY() - coords[1], 2));
-//                        if (distance <= MAX_CLIP_DISTANCE) {
-//                            distances.put(distance, (ParameterHolder) view);
-//                        }
-//                        System.out.println(distance);
-//                        System.out.println(coords[0]);
-//                    }
-//                }
-//            }
-//        }
 
         if(!distances.isEmpty()){
             float closestDistance = (Float) distances.keySet().toArray()[0];
@@ -108,7 +85,6 @@ public abstract class ParamBlock extends Block {
             ViewGroup v = (ViewGroup) block.getParent();
             v.removeView(block);
             int originalBlockWidth = block.getWidth();
-            int originalBlockHeight = block.getHeight();
             block.setLeft(0);
             block.setX(0);
             block.setTop(0);
@@ -227,5 +203,4 @@ public abstract class ParamBlock extends Block {
         return result;
     }
 
-    public abstract ParamValue getValue();
 }

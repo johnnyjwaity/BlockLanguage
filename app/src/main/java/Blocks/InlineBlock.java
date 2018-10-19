@@ -135,6 +135,5 @@ public abstract class InlineBlock extends Block {
         return result;
     }
 
-    public abstract void execute();
 
 }

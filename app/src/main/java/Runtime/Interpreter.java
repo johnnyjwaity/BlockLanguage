@@ -26,15 +26,6 @@ public class Interpreter {
     }
 
     public void run(){
-//        ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
-//        try {
-//            scriptEngine.eval("print('Hello World');");
-//        } catch (ScriptException e) {
-//            e.printStackTrace();
-//        }
-
-
-
         long timeStart = System.currentTimeMillis();
         final TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
         console.setVisibility(View.VISIBLE);

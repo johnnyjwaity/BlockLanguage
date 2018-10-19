@@ -25,13 +25,6 @@ public class TrueBlock extends ParamBlock{
     }
 
     @Override
-    public ParamValue getValue() {
-        ParamValue v = new ParamValue(DataType.Boolean);
-        v.setBoolValue(true);
-        return v;
-    }
-
-    @Override
     public String getJSValue() {
         return "true";
     }

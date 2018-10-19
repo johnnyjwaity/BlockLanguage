@@ -9,7 +9,6 @@ import com.johnnywaity.blocklanguage.MainActivity;
 public class IfBlock extends EnclosureBlock {
 
     private ParameterHolder boolValue;
-    private boolean evaledValue = false;
 
     public void setBoolValue(ParameterHolder boolValue) {
         this.boolValue = boolValue;
@@ -19,19 +18,8 @@ public class IfBlock extends EnclosureBlock {
         super(subviews);
     }
 
-    @Override
-    public void execute() {
-        if(boolValue.getValue().getBool()){
-            executeInside();
-            evaledValue = true;
-        } else {
-            evaledValue = false;
-        }
-    }
 
-    public boolean getEvaledValue() {
-        return evaledValue;
-    }
+
 
     public static IfBlock create(){
         TextView var = new TextView(MainActivity.sharedInstance.getBaseContext());

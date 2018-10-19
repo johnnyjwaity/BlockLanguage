@@ -51,40 +51,7 @@ public class LogicBlock extends ParamBlock {
         return n;
     }
 
-    @Override
-    public ParamValue getValue() {
-        ParamValue val = p1.getValue();
-        ParamValue val2 = p2.getValue();
-        ParamValue p = new ParamValue(DataType.Boolean);
 
-        switch(operator.getSelectedItem().toString()){
-            case "&&":
-                p.setBoolValue(val.getBool() && val2.getBool());
-                return p;
-            case "||":
-                p.setBoolValue(val.getBool() || val2.getBool());
-                return p;
-            case "==":
-                p.setBoolValue(val.getBool() == val2.getBool());
-                return p;
-            case "!=":
-                p.setBoolValue(val.getBool() != val2.getBool());
-                return p;
-            case "<":
-                p.setBoolValue(val.getNumValue() < val2.getNumValue());
-                return p;
-            case ">":
-                p.setBoolValue(val.getNumValue() > val2.getNumValue());
-                return p;
-            case "<=":
-                p.setBoolValue(val.getNumValue() <= val2.getNumValue());
-                return p;
-            case ">=":
-                p.setBoolValue(val.getNumValue() >= val2.getNumValue());
-                return p;
-        }
-        return null;
-    }
 
     @Override
     public String getJSValue() {

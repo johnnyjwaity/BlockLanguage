@@ -2,15 +2,11 @@ package Blocks;
 
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
-
-import Runtime.VariableManager;
 
 
 public class DeclareVariable extends InlineBlock {
@@ -27,12 +23,6 @@ public class DeclareVariable extends InlineBlock {
 
     public DeclareVariable(View[] subviews){
         super(subviews);
-    }
-
-
-    @Override
-    public void execute() {
-        VariableManager.sharedInstance.setVariable(variableName.getText().toString(), variableValue.getValue());
     }
 
     @Override

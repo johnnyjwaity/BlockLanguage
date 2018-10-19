@@ -125,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void writeToFile(Object data, Context context) {
         try {
-//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-//            outputStreamWriter.write(data);
-//            outputStreamWriter.close();
             FileOutputStream fos = context.openFileOutput("config.txt", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(data);
@@ -147,40 +144,10 @@ public class MainActivity extends AppCompatActivity {
             is.close();
             fis.close();
             return simpleClass;
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
         return null;
-
-//        String ret = "";
-//
-//        try {
-//            InputStream inputStream = context.openFileInput("config.txt");
-//
-//            if ( inputStream != null ) {
-//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//                String receiveString = "";
-//                StringBuilder stringBuilder = new StringBuilder();
-//
-//                while ( (receiveString = bufferedReader.readLine()) != null ) {
-//                    System.out.println("Line: "+receiveString);
-//                    stringBuilder.append(receiveString);
-//                }
-//
-//                inputStream.close();
-//                ret = stringBuilder.toString();
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            Log.e("login activity", "File not found: " + e.toString());
-//        } catch (IOException e) {
-//            Log.e("login activity", "Can not read file: " + e.toString());
-//        }
-//
-//        return ret;
     }
 
     private void populateMenu(){

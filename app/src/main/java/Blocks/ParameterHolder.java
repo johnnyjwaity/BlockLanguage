@@ -17,7 +17,6 @@ import java.util.List;
 
 public class ParameterHolder extends RelativeLayout {
 
-//    private static List<ParameterHolder> paramHolders;
 
     public ParameterHolder (int height){
         super(MainActivity.sharedInstance.getBaseContext());
@@ -30,41 +29,6 @@ public class ParameterHolder extends RelativeLayout {
         this.setLayoutParams(valParams);
         this.setMinimumWidth(100);
         this.setMinimumHeight(height - 20);
-//        this.setGravity(Gravity.LEFT);
-//        addParamHolder(this);
-
-
-
-
-
-    }
-
-//    public static List<ParameterHolder> getParamHolders() {
-//        if(paramHolders == null){
-//            paramHolders = new ArrayList<>();
-//        }
-//        return paramHolders;
-//    }
-//
-//    public static void addParamHolder(ParameterHolder p) {
-//        if(paramHolders == null){
-//            paramHolders = new ArrayList<>();
-//            paramHolders.add(p);
-//        }else{
-//            paramHolders.add(p);
-//        }
-//    }
-
-    public ParamValue getValue(){
-        ParamBlock paramBlock = null;
-        for(int i = 0; i < this.getChildCount(); i++){
-            View child = getChildAt(i);
-            if(child instanceof ParamBlock){
-                paramBlock = (ParamBlock) child;
-                break;
-            }
-        }
-        return paramBlock.getValue();
     }
 
     public String getJSValue(){

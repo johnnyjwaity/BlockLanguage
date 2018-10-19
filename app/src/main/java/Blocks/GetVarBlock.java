@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import Runtime.VariableManager;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 
@@ -32,9 +31,6 @@ public class GetVarBlock extends ParamBlock {
         value.setPadding(0, 5, 0, 0);
         value.setTextSize(18);
 
-//        value.setTextSize(61);
-//        value.setText("1-00dsfi0");
-
         TextView Number = new TextView(MainActivity.sharedInstance.getBaseContext());
         Number.setText("getVar");
         Number.setTextColor(Color.WHITE);
@@ -47,13 +43,6 @@ public class GetVarBlock extends ParamBlock {
 
 
 
-
-
-    @Override
-    public ParamValue getValue() {
-
-        return VariableManager.sharedInstance.getVariable(editTextValue.getText().toString());
-    }
 
     @Override
     public String getJSValue() {

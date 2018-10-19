@@ -12,11 +12,6 @@ public class StartBlock extends InlineBlock {
         super(subviews);
     }
 
-    @Override
-    public void execute() {
-
-    }
-
     public static StartBlock create(){
         TextView start = new TextView(MainActivity.sharedInstance.getBaseContext());
         start.setText("Start");

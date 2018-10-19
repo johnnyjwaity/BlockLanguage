@@ -29,15 +29,7 @@ public class FollowBlock extends InlineBlock {
 
     }
 
-    public void startFollowing(InlineHolder holder){
-//        FollowThread followThread = new FollowThread(this, holder);
-//        followThread.start();
-    }
 
-    @Override
-    public void execute() {
-
-    }
 
     @Override
     public String getJSValue() {

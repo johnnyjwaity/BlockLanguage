@@ -31,9 +31,6 @@ public class StringBlock extends ParamBlock{
         value.setPadding(0, 5, 0, 0);
         value.setTextSize(18);
 
-//        value.setTextSize(61);
-//        value.setText("1-00dsfi0");
-
         TextView String = new TextView(MainActivity.sharedInstance.getBaseContext());
         String.setText("String");
         String.setTextColor(Color.WHITE);
@@ -41,21 +38,6 @@ public class StringBlock extends ParamBlock{
         StringBlock n = new StringBlock(new View[]{String, value});
         n.setEditTextValue(value);
         return n;
-    }
-
-
-
-
-
-
-    @Override
-    public ParamValue getValue() {
-        ParamValue v = new ParamValue(DataType.String);
-        if(editTextValue.getText().toString().equals("")){
-            editTextValue.setText("0");
-        }
-        v.setStringValue(editTextValue.getText().toString());
-        return v;
     }
 
     @Override
