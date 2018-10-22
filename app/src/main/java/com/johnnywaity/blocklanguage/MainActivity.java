@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout menu = findViewById(R.id.MenuList);
                 menu.addView(b);
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
-                params.setMargins(8, 15, 0, 15);
+                params.setMargins(20, 15, 0, 15);
                 b.setLayoutParams(params);
 
             } catch (NoSuchMethodException e) {
