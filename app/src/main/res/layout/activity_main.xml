@@ -43,7 +43,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="#150015"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/Menu"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,12 +53,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="167dp"
-            android:layout_height="383dp"
+            android:layout_width="153dp"
+            android:layout_height="358dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="39dp"
-            app:srcCompat="@drawable/rocket" />
+            android:layout_marginBottom="80dp"
+            app:srcCompat="@drawable/rocket_fire" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -74,6 +74,22 @@
             android:progressBackgroundTint="@android:color/holo_red_dark"
             android:progressTint="@android:color/holo_green_light"
             android:scaleY="4" />
+
+        <TextView
+            android:id="@+id/questionBox"
+            android:layout_width="284dp"
+            android:layout_height="109dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:background="@android:drawable/alert_dark_frame"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:gravity="center"
+            android:text="Hello"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/background_light"
+            android:textSize="27sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -85,7 +101,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
     </RelativeLayout>
 

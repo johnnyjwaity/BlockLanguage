@@ -1,6 +1,5 @@
 package com.johnnywaity.blocklanguage;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -14,18 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.IOException;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Method;
@@ -37,21 +30,20 @@ import javax.script.ScriptEngineManager;
 import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.ElseBlock;
-import Blocks.EnclosureBlock;
 import Blocks.FalseBlock;
-import Blocks.FollowBlock;
 import Blocks.GetVarBlock;
 import Blocks.IfBlock;
-import Blocks.InlineBlock;
 import Blocks.LogicBlock;
 import Blocks.OperatorBlock;
-import Blocks.ParamBlock;
 import Blocks.NumBlock;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
 import Blocks.StringBlock;
 import Blocks.TrueBlock;
 import Blocks.WhileLoop;
+import Gameplay.GameplayManager;
+import Gameplay.QuestionBase;
+import Gameplay.QuestionParameter;
 import Runtime.Interpreter;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static MainActivity sharedInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        GameplayManager m = new GameplayManager();
         sharedInstance = this;
         Interpreter.scriptEngine = new ScriptEngineManager().getEngineByName("rhino");
         super.onCreate(savedInstanceState);
