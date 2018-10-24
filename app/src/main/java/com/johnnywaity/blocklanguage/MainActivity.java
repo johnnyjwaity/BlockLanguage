@@ -49,9 +49,9 @@ import Runtime.Interpreter;
 public class MainActivity extends AppCompatActivity {
 
     public static MainActivity sharedInstance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        GameplayManager m = new GameplayManager();
         sharedInstance = this;
         Interpreter.scriptEngine = new ScriptEngineManager().getEngineByName("rhino");
         super.onCreate(savedInstanceState);
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         5);
             }
         });
+        GameplayManager m = new GameplayManager();
 
     }
 
