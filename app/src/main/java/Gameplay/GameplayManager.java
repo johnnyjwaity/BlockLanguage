@@ -8,14 +8,16 @@ import com.johnnywaity.blocklanguage.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameplayManager {
 
     public static GameplayManager shared;
 
-    private List<QuestionBase> bases = new ArrayList<>();
-
+    private Map<QuestionBase, List<QuestionParameter[]>> bases = new HashMap<>();
+    private String currentAnswer = "";
 
     public GameplayManager(){
         shared = this;
@@ -33,6 +35,18 @@ public class GameplayManager {
                     ans += i + "\n";
                 }
                 return ans;
+            }
+        });
+
+        bases.add(new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                return "Print \"<p0>\"";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                return values.get(0);
             }
         });
 
@@ -58,11 +72,17 @@ public class GameplayManager {
                 }};
                 String[] question = bases.get(0).getQuestion(params);
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
-                System.out.println(question[1]);
+                currentAnswer = question[1];
             }
         });
     }
 
-
-
+    public void checkAnswer(String input) {
+        System.out.println("ans: " + currentAnswer);
+        if (input.equals(currentAnswer)){
+            System.out.println("Correct");
+        }else{
+            System.out.println("Incorrect");
+        }
+    }
 }

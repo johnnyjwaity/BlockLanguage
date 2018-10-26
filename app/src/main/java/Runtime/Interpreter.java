@@ -16,6 +16,7 @@ import javax.script.ScriptException;
 import Blocks.ElseBlock;
 import Blocks.IfBlock;
 import Blocks.InlineBlock;
+import Gameplay.GameplayManager;
 
 public class Interpreter {
     private InlineBlock startBlock;
@@ -32,7 +33,7 @@ public class Interpreter {
         console.setText("");
         console.bringToFront();
         InlineBlock currentBlock = startBlock;
-        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += '      ' + a + '\\n';}";
+        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a + '\\n';}";
         while(currentBlock.getSnappedView() != null){
             currentBlock = currentBlock.getSnappedView();
             executeStr += currentBlock.getJSValue();
@@ -45,9 +46,9 @@ public class Interpreter {
         rhino.setLanguageVersion(Context.VERSION_1_2);
         Scriptable scope = rhino.initStandardObjects();
         Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
-        System.out.println(Context.toString(res));
+        System.out.println("output: " + Context.toString(res)+"\n output done");
         String result = Context.toString(res);
-
+        GameplayManager.shared.checkAnswer(result);
         timeStart = System.currentTimeMillis() - timeStart;
         console.setText(result + "\n      Time Ran: " + ((float)timeStart)/1000 + "s");
 
