@@ -12,17 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Blocks.Block;
+import Blocks.DeclareVariable;
+import Blocks.InlineBlock;
+import Blocks.StartBlock;
+
 public class GameplayManager {
 
     public static GameplayManager shared;
 
-    private Map<QuestionBase, List<QuestionParameter[]>> bases = new HashMap<>();
+    private Map<QuestionBase, QuestionParameter[]> questions = new HashMap<>();
     private String currentAnswer = "";
 
     public GameplayManager(){
         shared = this;
 
-        bases.add(new QuestionBase() {
+        QuestionBase b = (new QuestionBase() {
             @Override
             public String setQuestionBase() {
                 return "Print <p0> through <p1>";
@@ -36,9 +41,26 @@ public class GameplayManager {
                 }
                 return ans;
             }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create()};
+            }
         });
 
-        bases.add(new QuestionBase() {
+        QuestionParameter[] params = new QuestionParameter[]{new QuestionParameter() {
+            @Override
+            public String getValue() {
+                return "" + (int) (Math.floor(Math.random() * 4) + 1);
+            }
+        }, new QuestionParameter() {
+            @Override
+            public String getValue() {
+                return "" + (int) (Math.floor(Math.random() * 4) + 7);
+            }
+        }};
+
+        QuestionBase b2 = (new QuestionBase() {
             @Override
             public String setQuestionBase() {
                 return "Print \"<p0>\"";
@@ -48,7 +70,22 @@ public class GameplayManager {
             public String getAnswer(List<String> values) {
                 return values.get(0);
             }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create()};
+            }
         });
+        QuestionParameter[] params2 = new QuestionParameter[]{new QuestionParameter() {
+            @Override
+            public String getValue() {
+                return "Hello World";
+            }
+        }};
+        questions.put(b2, params2);
+        questions.put(b, params);
+
+
 
         setQuestion();
     }
@@ -58,20 +95,10 @@ public class GameplayManager {
         MainActivity.sharedInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                QuestionParameter[] params = new QuestionParameter[]{new QuestionParameter() {
-                    @Override
-                    public String getValue() {
-                        return "" + (int) (Math.floor(Math.random() * 4) + 1);
-                    }
-                }, new QuestionParameter() {
-                    @Override
-                    public String getValue() {
-                        return "" + (int) (Math.floor(Math.random() * 4) + 7);
-                    }
-                }};
-                String[] question = bases.get(0).getQuestion(params);
+                QuestionBase base = (QuestionBase) questions.keySet().toArray()[((int)Math.floor(Math.random() * questions.size()))];
+                String[] question = base.getQuestion(questions.get(base));
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
+                base.setWorkflow();
                 currentAnswer = question[1];
             }
         });

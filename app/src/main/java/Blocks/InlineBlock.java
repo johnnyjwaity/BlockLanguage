@@ -90,17 +90,20 @@ public abstract class InlineBlock extends Block {
                 }
             }
             if(closestView instanceof InlineBlock){
-                int[] coords = new int[2];
-                closestView.getLocationOnScreen(coords);
-                block.translate(coords[0] - block.getX(), coords[1] + (closestView.getHeight() - block.getY()));
-//                block.translate(0, -(((float)block.getHeight()) / 2) - 3);
-                block.translate(0, -49);
-                InlineBlock parentView = (InlineBlock) closestView;
-                parentView.setSnappedView(block);
-                parentSnapView = parentView;
+                snapToBlock((InlineBlock) closestView);
             }
-
         }
+    }
+
+    public void snapToBlock(InlineBlock b){
+        int[] coords = new int[2];
+        b.getLocationOnScreen(coords);
+        this.translate(coords[0] - this.getX(), coords[1] + (b.getHeight() - this.getY()));
+//                block.translate(0, -(((float)block.getHeight()) / 2) - 3);
+        this.translate(0, -49);
+        InlineBlock parentView = (InlineBlock) b;
+        parentView.setSnappedView(this);
+        parentSnapView = parentView;
     }
 
     @Override
