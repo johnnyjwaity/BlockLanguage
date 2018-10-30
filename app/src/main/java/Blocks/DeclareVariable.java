@@ -56,6 +56,8 @@ public class DeclareVariable extends InlineBlock {
         DeclareVariable d = new DeclareVariable(new View[]{var, varName, equalSign, value});
         d.setVariableValue(value);
         d.setVariableName(varName);
+
+        d.addParamHolder(value);
         return d;
     }
 }

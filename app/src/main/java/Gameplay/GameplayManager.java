@@ -15,7 +15,12 @@ import java.util.Map;
 import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.InlineBlock;
+import Blocks.NumBlock;
+import Blocks.ParamBlock;
+import Blocks.ParameterHolder;
+import Blocks.PrintBlock;
 import Blocks.StartBlock;
+import Blocks.StringBlock;
 
 public class GameplayManager {
 
@@ -46,6 +51,13 @@ public class GameplayManager {
             public InlineBlock[] getPreset() {
                 return new InlineBlock[]{StartBlock.create(), DeclareVariable.create()};
             }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
+                return map;
+            }
         });
 
         QuestionParameter[] params = new QuestionParameter[]{new QuestionParameter() {
@@ -73,7 +85,14 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create()};
+                return new InlineBlock[]{StartBlock.create(), PrintBlock.create()};
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                map.put(StringBlock.create(), inlineBlocks[1].getHolderList().get(0));
+                return map;
             }
         });
         QuestionParameter[] params2 = new QuestionParameter[]{new QuestionParameter() {

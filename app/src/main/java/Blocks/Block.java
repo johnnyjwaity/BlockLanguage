@@ -3,6 +3,7 @@ package Blocks;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.johnnywaity.blocklanguage.R;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Block extends RelativeLayout implements Serializable{
@@ -27,6 +29,10 @@ public abstract class Block extends RelativeLayout implements Serializable{
     private float lastX;
     private float lastY;
     private int height;
+
+    private List<ParameterHolder> holderList = new ArrayList<>();
+
+
 
     public Block(View[] subviews, int height){
         super(MainActivity.sharedInstance.getBaseContext());
@@ -117,6 +123,14 @@ public abstract class Block extends RelativeLayout implements Serializable{
 
     public View[] getSubviews() {
         return subviews;
+    }
+
+    public void addParamHolder(ParameterHolder holder){
+        holderList.add(holder);
+    }
+
+    public List<ParameterHolder> getHolderList() {
+        return holderList;
     }
 
 

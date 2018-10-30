@@ -29,6 +29,12 @@ public class WhileLoop extends EnclosureBlock {
         return b;
     }
 
+    public static WhileLoop create(InlineBlock[] subBlocks){
+        WhileLoop block = create();
+        block.fo
+        return block;
+    }
+
     @Override
     public String getJSValue() {
         return "while(" + boolValue.getJSValue() + "){" + getInsideJS() + "}";

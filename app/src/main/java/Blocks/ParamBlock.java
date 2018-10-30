@@ -82,29 +82,35 @@ public abstract class ParamBlock extends Block {
                     closestView = distances.get(distance);
                 }
             }
-            ViewGroup v = (ViewGroup) block.getParent();
-            v.removeView(block);
-            int originalBlockWidth = block.getWidth();
-            block.setLeft(0);
-            block.setX(0);
-            block.setTop(0);
-            block.setY(0);
-            closestView.addView(block);
-            ViewGroup lastView = closestView;
-            Block lastBlock = this;
-            while(true){
-                if (lastView.equals(workflow)){
-                    break;
-                }
-                if(lastView instanceof Block){
-                    lastBlock = (Block) lastView;
-                }
-                lastView = (ViewGroup) lastView.getParent();
-            }
-            float changeInWidth = originalBlockWidth - closestView.getMinimumWidth();
-            lastBlock.setX(lastBlock.getX()+ (changeInWidth / 2));
-            updateBlockHeight(2, lastBlock.getHeight(), lastBlock);
+            snapToHolder(closestView);
         }
+    }
+
+    public void snapToHolder(ParameterHolder closestView){
+        ParamBlock block = this;
+        ViewGroup v = (ViewGroup) block.getParent();
+        v.removeView(block);
+        int originalBlockWidth = block.getWidth();
+        block.setLeft(0);
+        block.setX(0);
+        block.setTop(0);
+        block.setY(0);
+        closestView.addView(block);
+        ViewGroup lastView = closestView;
+        Block lastBlock = this;
+        RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
+        while(true){
+            if (lastView == null || lastView.equals(workflow)){
+                break;
+            }
+            if(lastView instanceof Block){
+                lastBlock = (Block) lastView;
+            }
+            lastView = (ViewGroup) lastView.getParent();
+        }
+        float changeInWidth = originalBlockWidth - closestView.getMinimumWidth();
+        lastBlock.setX(lastBlock.getX()+ (changeInWidth / 2));
+        updateBlockHeight(2, lastBlock.getHeight(), lastBlock);
     }
 
     public void updateBlockHeight(final int delay, final float oldHeight, final Block view) {

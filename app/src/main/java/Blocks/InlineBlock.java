@@ -26,6 +26,8 @@ public abstract class InlineBlock extends Block {
     private InlineBlock parentSnapView = null;
 
 
+
+
     @SuppressLint("ClickableViewAccessibility")
     public InlineBlock(View[] subviews){
         super(subviews, height);

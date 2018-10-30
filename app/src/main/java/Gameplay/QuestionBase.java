@@ -8,9 +8,12 @@ import com.johnnywaity.blocklanguage.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import Blocks.Block;
 import Blocks.InlineBlock;
+import Blocks.ParamBlock;
+import Blocks.ParameterHolder;
 
 public abstract class QuestionBase {
 
@@ -29,6 +32,7 @@ public abstract class QuestionBase {
 
     public void setWorkflow(){
         final InlineBlock[] blocks = getPreset();
+        final Map<ParamBlock, ParameterHolder> params = getParamPreset(blocks);
         MainActivity.sharedInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -52,7 +56,19 @@ public abstract class QuestionBase {
                     prevBlock = b;
                 }
 
+                for(ParamBlock b : params.keySet()){
+                    final ParamBlock block = b;
+                    workflow.addView(b);
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    System.out.println(params.get(block));
+                                    block.snapToHolder(params.get(block));
+                                }
+                            },
+                            1000);
 
+                }
 
             }
         });
@@ -62,4 +78,5 @@ public abstract class QuestionBase {
     public abstract String setQuestionBase();
     public abstract String getAnswer(List<String> values);
     public abstract InlineBlock[] getPreset();
+    public abstract Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks);
 }
