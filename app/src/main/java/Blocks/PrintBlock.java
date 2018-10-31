@@ -37,6 +37,7 @@ public class PrintBlock extends InlineBlock {
 
         PrintBlock p =  new PrintBlock(new View[]{var, paramHolder});
         p.setValue(paramHolder);
+        p.addParamHolder(paramHolder);
         return p;
     }
 

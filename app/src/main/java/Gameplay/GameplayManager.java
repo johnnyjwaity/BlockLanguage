@@ -16,11 +16,13 @@ import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.InlineBlock;
 import Blocks.NumBlock;
+import Blocks.OperatorBlock;
 import Blocks.ParamBlock;
 import Blocks.ParameterHolder;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
 import Blocks.StringBlock;
+import Blocks.WhileLoop;
 
 public class GameplayManager {
 
@@ -85,13 +87,18 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), PrintBlock.create()};
+                return new InlineBlock[]{StartBlock.create(), PrintBlock.create(), WhileLoop.create(new InlineBlock[]{StartBlock.create()})};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
-                map.put(StringBlock.create(), inlineBlocks[1].getHolderList().get(0));
+
+
+                OperatorBlock b = OperatorBlock.create();
+                map.put(b, inlineBlocks[1].getHolderList().get(0));
+//                map.put(b, inlineBlocks[2].getHolderList().get(0));
+                map.put(NumBlock.create(), b.getHolderList().get(0));
                 return map;
             }
         });
@@ -115,6 +122,7 @@ public class GameplayManager {
             @Override
             public void run() {
                 QuestionBase base = (QuestionBase) questions.keySet().toArray()[((int)Math.floor(Math.random() * questions.size()))];
+                base = (QuestionBase) questions.keySet().toArray()[0];
                 String[] question = base.getQuestion(questions.get(base));
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
                 base.setWorkflow();

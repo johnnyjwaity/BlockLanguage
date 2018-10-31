@@ -50,6 +50,8 @@ public class OperatorBlock  extends ParamBlock {
         n.setP1(value1);
         n.setP2(value2);
         n.setOperator(op);
+        n.addParamHolder(value1);
+        n.addParamHolder(value2);
         return n;
     }
 

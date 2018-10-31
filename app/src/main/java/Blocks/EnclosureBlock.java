@@ -47,6 +47,8 @@ public abstract class EnclosureBlock extends InlineBlock {
         return holder;
     }
 
+
+
     private class FollowThread extends Thread {
         private InlineHolder holder;
         private EnclosureBlock block;

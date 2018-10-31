@@ -31,12 +31,12 @@ public abstract class QuestionBase {
     }
 
     public void setWorkflow(){
-        final InlineBlock[] blocks = getPreset();
-        final Map<ParamBlock, ParameterHolder> params = getParamPreset(blocks);
         MainActivity.sharedInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
+                final InlineBlock[] blocks = getPreset();
+                final Map<ParamBlock, ParameterHolder> params = getParamPreset(blocks);
+                final RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
                 workflow.removeAllViews();
                 InlineBlock prevBlock = null;
                 for (InlineBlock b : blocks){
@@ -56,19 +56,29 @@ public abstract class QuestionBase {
                     prevBlock = b;
                 }
 
-                for(ParamBlock b : params.keySet()){
-                    final ParamBlock block = b;
-                    workflow.addView(b);
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    System.out.println(params.get(block));
-                                    block.snapToHolder(params.get(block));
-                                }
-                            },
-                            1000);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = 0;
+                        for(ParamBlock b : params.keySet()){
+                            final ParamBlock block = b;
+                            workflow.addView(b);
+                            new android.os.Handler().postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            System.out.println(params.get(block));
+                                            block.snapToHolder(params.get(block));
+                                        }
+                                    },
+                                    1000 + (200 * index));
 
-                }
+                            index++;
+
+                        }
+                    }
+                }, 0);
+
+
 
             }
         });
