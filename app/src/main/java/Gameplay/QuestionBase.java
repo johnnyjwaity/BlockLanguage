@@ -50,7 +50,7 @@ public abstract class QuestionBase {
                                         last.snapToBlock(first);
                                     }
                                 },
-                                1000);
+                                500);
 
                     }
                     prevBlock = b;
@@ -70,7 +70,7 @@ public abstract class QuestionBase {
                                             block.snapToHolder(params.get(block));
                                         }
                                     },
-                                    1000 + (200 * index));
+                                    800 + (400 * index));
 
                             index++;
 

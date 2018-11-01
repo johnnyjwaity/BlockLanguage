@@ -84,7 +84,10 @@ public abstract class Block extends RelativeLayout implements Serializable{
                     breakSnap();
                 }
                 else if(event.getAction() == MotionEvent.ACTION_UP){
-
+                    ImageView trash = MainActivity.sharedInstance.findViewById(R.id.trash);
+                    if(event.getRawX() >= trash.getX() && event.getRawX() <= trash.getX() + trash.getWidth() && event.getRawY() >= trash.getY() && event.getRawY() <= trash.getY() + trash.getHeight()){
+                        //Delete Object
+                    }
                     snap();
                 }
                 return true;
