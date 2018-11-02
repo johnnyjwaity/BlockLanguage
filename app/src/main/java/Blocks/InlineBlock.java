@@ -140,5 +140,11 @@ public abstract class InlineBlock extends Block {
         return result;
     }
 
+    public void delete(){
+        if(snappedView != null){
+            snappedView.delete();
+        }
+        ((RelativeLayout) MainActivity.sharedInstance.findViewById(R.id.Workflow)).removeView(this);
+    }
 
 }

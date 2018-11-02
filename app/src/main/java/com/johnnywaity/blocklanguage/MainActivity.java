@@ -1,5 +1,6 @@
 package com.johnnywaity.blocklanguage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import Blocks.ElseBlock;
 import Blocks.FalseBlock;
 import Blocks.GetVarBlock;
 import Blocks.IfBlock;
+import Blocks.InlineBlock;
 import Blocks.LogicBlock;
 import Blocks.OperatorBlock;
 import Blocks.NumBlock;
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static MainActivity sharedInstance;
 
+    private float lastX;
+    private float lastY;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedInstance = this;
@@ -97,6 +103,26 @@ public class MainActivity extends AppCompatActivity {
         });
         GameplayManager m = new GameplayManager();
 
+
+        final RelativeLayout workflow = findViewById(R.id.Workflow);
+        workflow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    lastX = event.getRawX();
+                    lastY = event.getRawY();
+                }else if(event.getAction() == MotionEvent.ACTION_MOVE){
+                    for (int i = 0; i < workflow.getChildCount(); i ++){
+                        View child = workflow.getChildAt(i);
+                        child.setX(child.getX() + (event.getRawX() - lastX));
+                        child.setY(child.getY() + (event.getRawY() - lastY));
+                    }
+                    lastX = event.getRawX();
+                    lastY = event.getRawY();
+                }
+                return true;
+            }
+        });
     }
 
     public void clickConsole(View view) {

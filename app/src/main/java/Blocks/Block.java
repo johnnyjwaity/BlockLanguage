@@ -3,8 +3,6 @@ package Blocks;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +15,7 @@ import com.johnnywaity.blocklanguage.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Block extends RelativeLayout implements Serializable{
 
@@ -71,9 +67,12 @@ public abstract class Block extends RelativeLayout implements Serializable{
         dragParams.setMargins(((int) (0.07 * height)), 12, 10, 0);
         drag.setLayoutParams(dragParams);
         drag.setAlpha(0.3f);
+        final RelativeLayout block = this;
         drag.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                ImageView trash = MainActivity.sharedInstance.findViewById(R.id.trash);
+
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     lastX = event.getRawX();
                     lastY = event.getRawY();
@@ -82,11 +81,24 @@ public abstract class Block extends RelativeLayout implements Serializable{
                     lastX = event.getRawX();
                     lastY = event.getRawY();
                     breakSnap();
+
+                    if(event.getRawX() >= trash.getX() && event.getRawX() <= trash.getX() + trash.getWidth() && event.getRawY() >= trash.getY() && event.getRawY() <= trash.getY() + trash.getHeight()){
+                        trash.setImageDrawable(MainActivity.sharedInstance.getDrawable(R.drawable.trash));
+                    }else{
+                        trash.setImageDrawable(MainActivity.sharedInstance.getDrawable(R.drawable.trash_closed));
+                    }
                 }
                 else if(event.getAction() == MotionEvent.ACTION_UP){
-                    ImageView trash = MainActivity.sharedInstance.findViewById(R.id.trash);
+                    trash.setImageDrawable(MainActivity.sharedInstance.getDrawable(R.drawable.trash_closed));
                     if(event.getRawX() >= trash.getX() && event.getRawX() <= trash.getX() + trash.getWidth() && event.getRawY() >= trash.getY() && event.getRawY() <= trash.getY() + trash.getHeight()){
                         //Delete Object
+                        System.out.println("Viraj");
+                        if(block instanceof InlineBlock){
+                            ((InlineBlock) block).delete();
+                        }else{
+                            ((RelativeLayout) MainActivity.sharedInstance.findViewById(R.id.Workflow)).removeView(block);
+                        }
+
                     }
                     snap();
                 }
@@ -141,5 +153,7 @@ public abstract class Block extends RelativeLayout implements Serializable{
     public abstract void breakSnap();
 
     public abstract String getJSValue();
+
+
 
 }

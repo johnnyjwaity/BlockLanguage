@@ -52,11 +52,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/showConsole"
         app:layout_constraintHorizontal_bias="0.992"
-        app:layout_constraintStart_toEndOf="@+id/relativeLayout"
-        app:srcCompat="@drawable/trash" />
+        app:layout_constraintStart_toEndOf="@+id/GameView"
+        app:srcCompat="@drawable/trash_closed" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/Workflow"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/GameView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/GameView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#150015"
@@ -106,19 +119,6 @@
             android:textColor="@android:color/background_light"
             android:textSize="27sp"
             android:textStyle="bold" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/Workflow"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
     </RelativeLayout>
 
     <RelativeLayout
