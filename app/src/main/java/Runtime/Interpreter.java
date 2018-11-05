@@ -46,7 +46,7 @@ public class Interpreter {
         rhino.setLanguageVersion(Context.VERSION_1_2);
         Scriptable scope = rhino.initStandardObjects();
         Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
-        System.out.println("output: " + Context.toString(res)+"\n output done");
+//        System.out.println("output: " + Context.toString(res)+"\n output done");
         String result = Context.toString(res);
         GameplayManager.shared.checkAnswer(result);
         timeStart = System.currentTimeMillis() - timeStart;

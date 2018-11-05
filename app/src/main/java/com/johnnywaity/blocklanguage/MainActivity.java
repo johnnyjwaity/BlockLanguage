@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        populateMenu();
 
         TextView console = findViewById(R.id.console);
         console.setVisibility(View.INVISIBLE);
@@ -170,45 +169,51 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void populateMenu(){
-        Class[] blocks = {StartBlock.class, DeclareVariable.class, PrintBlock.class, NumBlock.class, StringBlock.class,
-                GetVarBlock.class, OperatorBlock.class, LogicBlock.class, TrueBlock.class, FalseBlock.class, IfBlock.class, ElseBlock.class, WhileLoop.class};
-        for (Class block : blocks){
-            try {
-                final Method createMethod = block.getMethod("create", null);
-                Block b = (Block) createMethod.invoke(null, null);
-                b.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getAction() == MotionEvent.ACTION_UP){
-                            RelativeLayout workflow = findViewById(R.id.Workflow);
-                            try {
-                                Block obj = (Block) createMethod.invoke(null, null);
-                                obj.setId(View.generateViewId());
-                                workflow.addView(obj);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        return true;
-                    }
-                });
-                LinearLayout menu = findViewById(R.id.MenuList);
-                menu.addView(b);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
-                params.setMargins(20, 15, 0, 15);
-                b.setLayoutParams(params);
+    public void populateMenu(int level){
+        LinearLayout menu = findViewById(R.id.MenuList);
+        menu.removeAllViews();
 
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+        Class[][] levelBlocks = {{StartBlock.class, PrintBlock.class, StringBlock.class, NumBlock.class}, {DeclareVariable.class, GetVarBlock.class, OperatorBlock.class},
+                {IfBlock.class, ElseBlock.class, LogicBlock.class, TrueBlock.class, FalseBlock.class}, {WhileLoop.class}};
+        for(int i = 0; i < level; i++){
+            for (Class block : levelBlocks[i]){
+                try {
+                    final Method createMethod = block.getMethod("create", null);
+                    Block b = (Block) createMethod.invoke(null, null);
+                    b.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if(event.getAction() == MotionEvent.ACTION_UP){
+                                RelativeLayout workflow = findViewById(R.id.Workflow);
+                                try {
+                                    Block obj = (Block) createMethod.invoke(null, null);
+                                    obj.setId(View.generateViewId());
+                                    workflow.addView(obj);
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                } catch (InvocationTargetException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            return true;
+                        }
+                    });
+
+                    menu.addView(b);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) b.getLayoutParams();
+                    params.setMargins(20, 15, 0, 15);
+                    b.setLayoutParams(params);
+
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     }
 
     private List<View> getAllChildren(View v) {
