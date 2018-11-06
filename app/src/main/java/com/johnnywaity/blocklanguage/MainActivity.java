@@ -2,13 +2,17 @@ package com.johnnywaity.blocklanguage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -122,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+
+
     }
 
     public void clickConsole(View view) {
@@ -173,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout menu = findViewById(R.id.MenuList);
         menu.removeAllViews();
 
-        Class[][] levelBlocks = {{StartBlock.class, PrintBlock.class, StringBlock.class, NumBlock.class}, {DeclareVariable.class, GetVarBlock.class, OperatorBlock.class},
+        Class[][] levelBlocks = {{StartBlock.class, PrintBlock.class, StringBlock.class, NumBlock.class, DeclareVariable.class, GetVarBlock.class}, {DeclareVariable.class, GetVarBlock.class, OperatorBlock.class},
                 {IfBlock.class, ElseBlock.class, LogicBlock.class, TrueBlock.class, FalseBlock.class}, {WhileLoop.class}};
         for(int i = 0; i < level; i++){
             for (Class block : levelBlocks[i]){

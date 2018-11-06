@@ -1,6 +1,9 @@
 package Blocks;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,8 +19,8 @@ public class DeclareVariable extends InlineBlock {
         variableValue = block;
     }
 
-    private EditText variableName = null;
-    public void setVariableName(EditText variableName) {
+    private TextView variableName = null;
+    public void setVariableName(TextView variableName) {
         this.variableName = variableName;
     }
 
@@ -36,13 +39,40 @@ public class DeclareVariable extends InlineBlock {
         var.setTextColor(Color.WHITE);
         var.setTextSize(21);
 
-        EditText varName = new EditText(MainActivity.sharedInstance.getBaseContext());
+        final TextView varName = new TextView(MainActivity.sharedInstance.getBaseContext());
         varName.setBackgroundColor(Color.WHITE);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 52);
         params.setMargins(0, 10, 0 , 0);
         varName.setPadding(0, 0, 0, 0);
         varName.setLayoutParams(params);
         varName.setTextSize(20);
+        varName.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.sharedInstance);
+                builder.setTitle("Enter Variable Name");
+                final EditText input = new EditText(MainActivity.sharedInstance);
+                input.setText(varName.getText().toString());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        varName.setText(input.getText().toString());
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         TextView equalSign = new TextView(MainActivity.sharedInstance.getBaseContext());
         equalSign.setText("=");
