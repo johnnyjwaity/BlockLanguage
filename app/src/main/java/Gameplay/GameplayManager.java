@@ -247,16 +247,21 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create(), PrintBlock.create()};
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                return new InlineBlock[]{StartBlock.create(), b, PrintBlock.create()};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
-                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
+                NumBlock numB = NumBlock.create();
+                numB.setValue(5);
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
                 map.put(GetVarBlock.create(), b.getHolderList().get(0));
+
                 map.put(NumBlock.create(), b.getHolderList().get(1));
                 return map;
             }
@@ -281,14 +286,24 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create(), DeclareVariable.create(), PrintBlock.create()};
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                DeclareVariable b2 = DeclareVariable.create();
+                b2.changeVariableName("y");
+                return new InlineBlock[]{StartBlock.create(), b, b2, PrintBlock.create()};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
-                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
-                map.put(NumBlock.create(), inlineBlocks[2].getHolderList().get(0));
+                NumBlock numB = NumBlock.create();
+                numB.setValue(10);
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
+
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(3);
+                map.put(numB2, inlineBlocks[2].getHolderList().get(0));
+
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[3].getHolderList().get(0));
 //                map.put(GetVarBlock.create(), b.getHolderList().get(0));
@@ -310,13 +325,17 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create(), PrintBlock.create()};
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                return new InlineBlock[]{StartBlock.create(), b, PrintBlock.create()};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
-                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
+                NumBlock numB = NumBlock.create();
+                numB.setValue(4);
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
                 map.put(NumBlock.create(), b.getHolderList().get(0));
@@ -337,14 +356,23 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create(), DeclareVariable.create(), PrintBlock.create()};
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                DeclareVariable b2 = DeclareVariable.create();
+                b2.changeVariableName("y");
+                return new InlineBlock[]{StartBlock.create(), b, b2, PrintBlock.create()};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
-                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
-                map.put(NumBlock.create(), inlineBlocks[2].getHolderList().get(0));
+                NumBlock numB = NumBlock.create();
+                numB.setValue(-2);
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
+
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(9);
+                map.put(numB2, inlineBlocks[2].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[3].getHolderList().get(0));
                 map.put(OperatorBlock.create(), b.getHolderList().get(1));
@@ -354,15 +382,15 @@ public class GameplayManager {
         };
 
         questions.add(new HashMap<QuestionBase, QuestionParameter[]>());
-        questions.get(1).put(varTimesNum, new QuestionParameter[]{randNumberParams10});
-        questions.get(1).put(xMinusY, new QuestionParameter[]{});
+//        questions.get(1).put(varTimesNum, new QuestionParameter[]{randNumberParams10});
+//        questions.get(1).put(xMinusY, new QuestionParameter[]{});
         questions.get(1).put(twoToPowerOfX, new QuestionParameter[]{});
         questions.get(1).put(xPlusyPlusNum, new QuestionParameter[]{randNumberParams10});
 
         QuestionBase printTrueFalseIfXEqualsNum = new QuestionBase() {
             @Override
             public String setQuestionBase() {
-                return "Print True if x equals <p0>. Otherwise, print False";
+                return "Print True if x equals <p0>. Else, print False";
             }
 
             @Override
@@ -372,12 +400,16 @@ public class GameplayManager {
 
             @Override
             public InlineBlock[] getPreset() {
-                return new InlineBlock[]{StartBlock.create(), DeclareVariable.create(), IfBlock.create(new InlineBlock[]{PrintBlock.create()}), ElseBlock.create(new InlineBlock[]{PrintBlock.create()})};
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                return new InlineBlock[]{StartBlock.create(), b, IfBlock.create(new InlineBlock[]{PrintBlock.create()}), ElseBlock.create(new InlineBlock[]{PrintBlock.create()})};
             }
 
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                NumBlock numB = NumBlock.create();
+                numB.setValue(3);
                 map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
                 LogicBlock b = LogicBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));

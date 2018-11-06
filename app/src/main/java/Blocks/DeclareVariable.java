@@ -90,4 +90,8 @@ public class DeclareVariable extends InlineBlock {
         d.addParamHolder(value);
         return d;
     }
+
+    public void changeVariableName(String name){
+        variableName.setText(name);
+    }
 }

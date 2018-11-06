@@ -76,4 +76,8 @@ public class NumBlock extends ParamBlock {
     public String getJSValue() {
         return editTextValue.getText().toString();
     }
+
+    public void setValue(float value){
+        editTextValue.setText(value + "");
+    }
 }
