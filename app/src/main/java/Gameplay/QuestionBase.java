@@ -39,6 +39,7 @@ public abstract class QuestionBase {
                 final RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
                 workflow.removeAllViews();
                 InlineBlock prevBlock = null;
+                int index = 0;
                 for (InlineBlock b : blocks){
                     workflow.addView(b);
                     if(prevBlock != null){
@@ -50,7 +51,8 @@ public abstract class QuestionBase {
                                         last.snapToBlock(first);
                                     }
                                 },
-                                500);
+                                200+index*600);
+                        index++;
 
                     }
                     prevBlock = b;
@@ -70,13 +72,13 @@ public abstract class QuestionBase {
                                             block.snapToHolder(params.get(block));
                                         }
                                     },
-                                    800 + (400 * index));
+                                    1300 + (400 * index));
 
                             index++;
 
                         }
                     }
-                }, 0);
+                }, 10);
 
 
 

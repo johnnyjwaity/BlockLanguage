@@ -23,6 +23,9 @@ public class GetVarBlock extends ParamBlock {
     public void setEditTextValue(TextView val){
         editTextValue = val;
     }
+    public void changeVarName(String name){
+        editTextValue.setText(name);
+    }
 
 
     public static GetVarBlock create(){

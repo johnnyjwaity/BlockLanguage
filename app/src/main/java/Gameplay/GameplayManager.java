@@ -35,6 +35,7 @@ public class GameplayManager {
 
     private List<Map<QuestionBase, QuestionParameter[]>> questions = new ArrayList<>();
     private String currentAnswer = "";
+    private List<String> currValues = new ArrayList<>();
 
     private int currentLevel = 3;
 
@@ -52,9 +53,9 @@ public class GameplayManager {
             public void run() {
                 QuestionBase base = (QuestionBase) questions.get(currentLevel - 1).keySet().toArray()[(int)(Math.random() * questions.get(currentLevel - 1).size())];
                 String[] question = base.getQuestion(questions.get(currentLevel - 1).get(base));
+                currentAnswer = question[1];
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
                 base.setWorkflow();
-                currentAnswer = question[1];
             }
         });
     }
@@ -79,6 +80,7 @@ public class GameplayManager {
 
             @Override
             public String getAnswer(List<String> values) {
+
                 String ans = "";
                 for (int i = Integer.parseInt(values.get(0)); i <= Integer.parseInt(values.get(1)); i ++){
                     ans += i + "\n";
@@ -237,12 +239,14 @@ public class GameplayManager {
         QuestionBase varTimesNum = new QuestionBase() {
             @Override
             public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 10) + 1));
                 return "Print x times <p0>";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return ""+Integer.parseInt(values.get(0))*5;
+                return ""+Integer.parseInt(values.get(0))*Integer.parseInt(currValues.get(0));
             }
 
             @Override
@@ -256,7 +260,7 @@ public class GameplayManager {
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 NumBlock numB = NumBlock.create();
-                numB.setValue(5);
+                numB.setValue(Integer.parseInt(currValues.get(0)));
                 map.put(numB, inlineBlocks[1].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
@@ -276,12 +280,15 @@ public class GameplayManager {
         QuestionBase xMinusY = new QuestionBase() {
             @Override
             public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 5) + 6));
+                currValues.add(""+((int)(Math.random() * 5) + 1));
                 return "Print x minus y";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return "7";
+                return Integer.parseInt(currValues.get(0))-Integer.parseInt(currValues.get(1))+"";
             }
 
             @Override
@@ -297,11 +304,11 @@ public class GameplayManager {
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 NumBlock numB = NumBlock.create();
-                numB.setValue(10);
+                numB.setValue(Integer.parseInt(currValues.get(0)));
                 map.put(numB, inlineBlocks[1].getHolderList().get(0));
 
                 NumBlock numB2 = NumBlock.create();
-                numB2.setValue(3);
+                numB2.setValue(Integer.parseInt(currValues.get(1)));
                 map.put(numB2, inlineBlocks[2].getHolderList().get(0));
 
                 OperatorBlock b = OperatorBlock.create();
@@ -315,12 +322,14 @@ public class GameplayManager {
         QuestionBase twoToPowerOfX = new QuestionBase() {
             @Override
             public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 7) + 1));
                 return "Print 2 to the power of x";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return "16";
+                return ""+(Math.pow(2, Integer.parseInt(currValues.get(0))));
             }
 
             @Override
@@ -334,7 +343,7 @@ public class GameplayManager {
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 NumBlock numB = NumBlock.create();
-                numB.setValue(4);
+                numB.setValue(Integer.parseInt(currValues.get(0)));
                 map.put(numB, inlineBlocks[1].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
@@ -346,12 +355,15 @@ public class GameplayManager {
         QuestionBase xPlusyPlusNum = new QuestionBase() {
             @Override
             public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 10) + 1));
+                currValues.add(""+((int)(Math.random() * 10) + 1));
                 return "Print x + y + <p0>";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return (7+values.get(0))+"";
+                return Integer.parseInt(currValues.get(0))+Integer.parseInt(currValues.get(1))+Integer.parseInt(values.get(0))+"";
             }
 
             @Override
@@ -367,11 +379,11 @@ public class GameplayManager {
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 NumBlock numB = NumBlock.create();
-                numB.setValue(-2);
+                numB.setValue(Integer.parseInt(currValues.get(0)));
                 map.put(numB, inlineBlocks[1].getHolderList().get(0));
 
                 NumBlock numB2 = NumBlock.create();
-                numB2.setValue(9);
+                numB2.setValue(Integer.parseInt(currValues.get(1)));
                 map.put(numB2, inlineBlocks[2].getHolderList().get(0));
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[3].getHolderList().get(0));
@@ -382,8 +394,8 @@ public class GameplayManager {
         };
 
         questions.add(new HashMap<QuestionBase, QuestionParameter[]>());
-//        questions.get(1).put(varTimesNum, new QuestionParameter[]{randNumberParams10});
-//        questions.get(1).put(xMinusY, new QuestionParameter[]{});
+        questions.get(1).put(varTimesNum, new QuestionParameter[]{randNumberParams10});
+        questions.get(1).put(xMinusY, new QuestionParameter[]{});
         questions.get(1).put(twoToPowerOfX, new QuestionParameter[]{});
         questions.get(1).put(xPlusyPlusNum, new QuestionParameter[]{randNumberParams10});
 
@@ -395,6 +407,7 @@ public class GameplayManager {
 
             @Override
             public String getAnswer(List<String> values) {
+                currValues = values;
                 return "3".equals(values.get(0))+"";
             }
 
@@ -410,18 +423,74 @@ public class GameplayManager {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 NumBlock numB = NumBlock.create();
                 numB.setValue(3);
-                map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
                 LogicBlock b = LogicBlock.create();
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
-                map.put(GetVarBlock.create(), b.getHolderList().get(0));
-                map.put(NumBlock.create(), b.getHolderList().get(1));
-//                map.put(NumBlock.create(), b.getHolderList().get(1));
+                GetVarBlock varB = GetVarBlock.create();
+                varB.changeVarName("x");
+                map.put(varB, b.getHolderList().get(0));
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(Integer.parseInt(currValues.get(0)));
+                map.put(numB2, b.getHolderList().get(1));
+                return map;
+            }
+        };
+
+        QuestionParameter randNumberParams3or4 = new QuestionParameter() {
+            @Override
+            public String getValue() {
+                return "" + ((int)(Math.random() * 2) + 3);
+            }
+        };
+
+        QuestionBase printIfXTimesNumGreaterThanNum = new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 3) + 2));
+                return "Print True if x * <p0> is greater than <p1>. Else, print False";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                currValues.add(values.get(0));
+                currValues.add(values.get(1));
+                return (Integer.parseInt(currValues.get(0))*Integer.parseInt(values.get(0))>Integer.parseInt(values.get(1)))+"";
+            }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                return new InlineBlock[]{StartBlock.create(), b, IfBlock.create(new InlineBlock[]{PrintBlock.create()}), ElseBlock.create(new InlineBlock[]{PrintBlock.create()})};
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                NumBlock numB = NumBlock.create();
+                numB.setValue(Integer.parseInt(currValues.get(0)));
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
+                LogicBlock b = LogicBlock.create();
+                map.put(b, inlineBlocks[2].getHolderList().get(0));
+                OperatorBlock opB = OperatorBlock.create();
+                map.put(opB, b.getHolderList().get(0));
+                GetVarBlock varB = GetVarBlock.create();
+                varB.changeVarName("x");
+                map.put(varB, opB.getHolderList().get(0));
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(Integer.parseInt(currValues.get(2)));
+                map.put(numB2, b.getHolderList().get(1));
+                NumBlock numB3 = NumBlock.create();
+                numB3.setValue(Integer.parseInt(currValues.get(1)));
+                map.put(numB3, opB.getHolderList().get(1));
                 return map;
             }
         };
 
         questions.add(new HashMap<QuestionBase, QuestionParameter[]>());
-        questions.get(2).put(printTrueFalseIfXEqualsNum, new QuestionParameter[]{randNumberParams10});
+//        questions.get(2).put(printTrueFalseIfXEqualsNum, new QuestionParameter[]{randNumberParams3or4});
+        questions.get(2).put(printIfXTimesNumGreaterThanNum, new QuestionParameter[]{randNumberParams10, randNumberParams10});
 
 
     }
