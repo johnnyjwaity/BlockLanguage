@@ -1,6 +1,7 @@
 package Gameplay;
 
 import android.graphics.Path;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
@@ -37,6 +39,10 @@ public class GameplayManager {
     private String currentAnswer = "";
     private List<String> currValues = new ArrayList<>();
 
+    private ProgressBar healthBar;
+
+    int fuel = 100;
+
     private int currentLevel = 3;
 
     public GameplayManager(){
@@ -44,6 +50,24 @@ public class GameplayManager {
         MainActivity.sharedInstance.populateMenu(currentLevel);
         populateQuestions();
         setQuestion();
+
+        healthBar = MainActivity.sharedInstance.findViewById(R.id.progressBar);
+        healthBar.setProgress(fuel);
+
+        decreaseFuel();
+
+    }
+
+    private void decreaseFuel() {
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        fuel -= 1;
+                        healthBar.setProgress(fuel);
+                        decreaseFuel();
+                    }
+                },
+        50);
     }
 
 
@@ -69,6 +93,15 @@ public class GameplayManager {
             System.out.println("Incorrect");
         }
     }
+
+
+
+
+
+
+
+
+
 
     private void populateQuestions(){
 

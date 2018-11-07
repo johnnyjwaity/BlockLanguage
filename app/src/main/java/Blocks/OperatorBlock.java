@@ -2,6 +2,7 @@ package Blocks;
 
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -38,12 +39,14 @@ public class OperatorBlock  extends ParamBlock {
         ParameterHolder value1 = new ParameterHolder(height);
         ParameterHolder value2 = new ParameterHolder(height);
 
-        Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
+        final Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
+        op.setScaleX(1.5f);
+        op.setScaleY(1.5f);
         String[] items = new String[]{"+", "-", "*", "/", "%", "^"};
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 52);
         params.setMargins(0, 0, 0 , 0);
-        op.setPadding(0, 0, 0, 0);
+        op.setPadding(0, 20, 0, 0);
         op.setLayoutParams(params);
         op.setAdapter(new ArrayAdapter<String>(MainActivity.sharedInstance, android.R.layout.simple_spinner_dropdown_item, items));
         OperatorBlock n = new OperatorBlock(new View[]{value1, op, value2});
@@ -52,6 +55,13 @@ public class OperatorBlock  extends ParamBlock {
         n.setOperator(op);
         n.addParamHolder(value1);
         n.addParamHolder(value2);
+
+        op.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ((TextView) op.getSelectedView()).setTextColor(Color.WHITE);
+            }
+        });
         return n;
     }
 
