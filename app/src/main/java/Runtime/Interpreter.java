@@ -27,11 +27,11 @@ public class Interpreter {
     }
 
     public void run(){
-        long timeStart = System.currentTimeMillis();
-        final TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
-        console.setVisibility(View.VISIBLE);
-        console.setText("");
-        console.bringToFront();
+//        long timeStart = System.currentTimeMillis();
+//        final TextView console = MainActivity.sharedInstance.findViewById(R.id.console);
+//        console.setVisibility(View.VISIBLE);
+//        console.setText("");
+//        console.bringToFront();
         InlineBlock currentBlock = startBlock;
         String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a + '\\n';}";
         while(currentBlock.getSnappedView() != null){
@@ -40,7 +40,7 @@ public class Interpreter {
 
         }
         executeStr += "PRINT_STR";
-        System.out.println(executeStr);
+//        System.out.println(executeStr);
         Context rhino = Context.enter();
         rhino.setOptimizationLevel(-1);
         rhino.setLanguageVersion(Context.VERSION_1_2);
@@ -49,17 +49,17 @@ public class Interpreter {
 //        System.out.println("output: " + Context.toString(res)+"\n output done");
         String result = Context.toString(res);
         GameplayManager.shared.checkAnswer(result);
-        timeStart = System.currentTimeMillis() - timeStart;
-        console.setText(result + "\n      Time Ran: " + ((float)timeStart)/1000 + "s");
+//        timeStart = System.currentTimeMillis() - timeStart;
+//        console.setText(result + "\n      Time Ran: " + ((float)timeStart)/1000 + "s");
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        MainActivity.sharedInstance.findViewById(R.id.MenuList).bringToFront();
-                        console.setVisibility(View.INVISIBLE);
-                    }
-                },
-                5000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        MainActivity.sharedInstance.findViewById(R.id.MenuList).bringToFront();
+//                        console.setVisibility(View.INVISIBLE);
+//                    }
+//                },
+//                5000);
     }
 
 

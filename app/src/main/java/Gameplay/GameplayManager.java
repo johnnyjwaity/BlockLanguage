@@ -1,7 +1,9 @@
 package Gameplay;
 
+import android.graphics.Color;
 import android.graphics.Path;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.logging.Handler;
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
@@ -40,10 +43,15 @@ public class GameplayManager {
     private List<String> currValues = new ArrayList<>();
 
     private ProgressBar healthBar;
-
     int fuel = 100;
 
-    private int currentLevel = 3;
+    private RelativeLayout background;
+    private int[] colors = new int[]{Color.BLACK, Color.rgb(28, 37, 60), Color.rgb(31, 62, 90), Color.rgb(20, 80, 81), Color.rgb(40, 28, 60), Color.rgb(60, 28, 49)};
+    private int currentColor = 0;
+    private float currentThreshold = 0;
+
+
+    private int currentLevel = 1;
 
     public GameplayManager(){
         shared = this;
@@ -54,11 +62,15 @@ public class GameplayManager {
         healthBar = MainActivity.sharedInstance.findViewById(R.id.progressBar);
         healthBar.setProgress(fuel);
 
+        background = MainActivity.sharedInstance.findViewById(R.id.GameView);
+
         decreaseFuel();
+        changeBackground();
 
     }
 
     private void decreaseFuel() {
+
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -70,6 +82,29 @@ public class GameplayManager {
         50);
     }
 
+    private void changeBackground(){
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (currentThreshold > 1) {
+                    currentThreshold = 0;
+                    currentColor += 1;
+                    if(currentColor >= colors.length){
+                        currentColor = 0;
+                    }
+                }
+                background.setBackgroundColor(interpolateColors(colors[currentColor], colors[(currentColor + 1 >= colors.length) ? 0 : currentColor + 1], currentThreshold));
+                currentThreshold += 0.05;
+                changeBackground();
+            }
+        }, 250);
+    }
+    private static int interpolateColors(int color1, int color2, float threshold){
+        Color c1 = Color.valueOf(color1);
+        Color c2 = Color.valueOf(color2);
+        return Color.rgb(c1.red() + ((c2.red() - c1.red()) * threshold), c1.green() + ((c2.green() - c1.green()) * threshold), c1.blue() + ((c2.blue() - c1.blue()) * threshold));
+
+    }
 
     public void setQuestion(){
         MainActivity.sharedInstance.runOnUiThread(new Runnable() {
@@ -85,9 +120,19 @@ public class GameplayManager {
     }
 
     public void checkAnswer(String input) {
-        System.out.println("ans: " + currentAnswer);
-        System.out.println("ans: "+ input.replace(" ", ""));
-        if (input.replace(" ", "").equalsIgnoreCase(currentAnswer.replace(" ", ""))){
+        String correctAnswer = "";
+        String answer = "";
+        for(char c : input.toCharArray()){
+            if(((int) c) >= 30 && ((int) c) <= 122){
+                answer += c;
+            }
+        }
+        for(char c : currentAnswer.toCharArray()){
+            if(((int) c) >= 30 && ((int) c) <= 122){
+                correctAnswer += c;
+            }
+        }
+        if (answer.equalsIgnoreCase(correctAnswer)){
             System.out.println("Correct");
         }else{
             System.out.println("Incorrect");
@@ -141,6 +186,11 @@ public class GameplayManager {
 
                 return map;
             }
+
+            @Override
+            public String getHint() {
+                return "Hint 1";
+            }
         });
 
         QuestionParameter[] params = new QuestionParameter[]{new QuestionParameter() {
@@ -178,6 +228,10 @@ public class GameplayManager {
                 map.put(StringBlock.create(), inlineBlocks[1].getHolderList().get(0));
                 return map;
             }
+            @Override
+            public String getHint() {
+                return "Hint 2";
+            }
         });
         QuestionParameter[] params2 = new QuestionParameter[]{new QuestionParameter() {
             @Override
@@ -207,6 +261,10 @@ public class GameplayManager {
                 Map<ParamBlock, ParameterHolder> map = new HashMap<>();
                 map.put(NumBlock.create(), inlineBlocks[1].getHolderList().get(0));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "Hint 3";
             }
         };
         QuestionParameter randNumberParams = new QuestionParameter() {
@@ -239,6 +297,10 @@ public class GameplayManager {
                 map.put(StringBlock.create(), inlineBlocks[2].getHolderList().get(0));
                 return map;
             }
+            @Override
+            public String getHint() {
+                return "Hint 4";
+            }
         };
 
         QuestionBase printHelloWorldSelf = new QuestionBase() {
@@ -260,6 +322,10 @@ public class GameplayManager {
             @Override
             public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
                 return new HashMap<>();
+            }
+            @Override
+            public String getHint() {
+                return "Hint 5";
             }
         };
 
@@ -301,6 +367,10 @@ public class GameplayManager {
 
                 map.put(NumBlock.create(), b.getHolderList().get(1));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "";
             }
         };
         QuestionParameter randNumberParams10 = new QuestionParameter() {
@@ -350,6 +420,10 @@ public class GameplayManager {
 //                map.put(NumBlock.create(), b.getHolderList().get(1));
                 return map;
             }
+            @Override
+            public String getHint() {
+                return "";
+            }
         };
 
         QuestionBase twoToPowerOfX = new QuestionBase() {
@@ -382,6 +456,10 @@ public class GameplayManager {
                 map.put(b, inlineBlocks[2].getHolderList().get(0));
                 map.put(NumBlock.create(), b.getHolderList().get(0));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "";
             }
         };
 
@@ -423,6 +501,10 @@ public class GameplayManager {
                 map.put(OperatorBlock.create(), b.getHolderList().get(1));
 //                map.put(NumBlock.create(), b.getHolderList().get(1));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "";
             }
         };
 
@@ -466,6 +548,10 @@ public class GameplayManager {
                 numB2.setValue(Integer.parseInt(currValues.get(0)));
                 map.put(numB2, b.getHolderList().get(1));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "";
             }
         };
 
@@ -518,6 +604,10 @@ public class GameplayManager {
                 numB3.setValue(Integer.parseInt(currValues.get(1)));
                 map.put(numB3, opB.getHolderList().get(1));
                 return map;
+            }
+            @Override
+            public String getHint() {
+                return "";
             }
         };
 

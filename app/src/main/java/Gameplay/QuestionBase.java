@@ -91,4 +91,5 @@ public abstract class QuestionBase {
     public abstract String getAnswer(List<String> values);
     public abstract InlineBlock[] getPreset();
     public abstract Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks);
+    public abstract String getHint();
 }
