@@ -4,10 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         5);
             }
         });
-        GameplayManager m = new GameplayManager();
+        final GameplayManager m = new GameplayManager();
 
 
         final RelativeLayout workflow = findViewById(R.id.Workflow);
@@ -127,7 +134,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ((Button) findViewById(R.id.hintButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String hint = m.getHint();
+                ConstraintLayout root = (ConstraintLayout) v.getParent();
 
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                MainActivity.sharedInstance.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screen_height = displayMetrics.heightPixels;
+                int screen_width = displayMetrics.widthPixels;
+                int width = 800;
+                int height = 350;
+
+                RelativeLayout box = new RelativeLayout(MainActivity.sharedInstance);
+                box.setBackground(getDrawable(android.R.drawable.alert_dark_frame));
+                box.setBackgroundTintMode(PorterDuff.Mode.SRC_ATOP);
+                box.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.holo_orange_light, MainActivity.sharedInstance.getTheme())));
+                box.setLayoutParams(new ConstraintLayout.LayoutParams(width, height));
+                root.addView(box);
+                box.setX((screen_width / 2) - width / 2);
+                box.setY((screen_height / 2) - height / 2);
+
+                TextView hintText = new TextView(MainActivity.sharedInstance);
+                hintText.setTextColor(Color.WHITE);
+                hintText.setTextSize(26);
+                hintText.setTypeface(Typeface.DEFAULT_BOLD);
+                hintText.setText(hint);
+                hintText.setGravity(Gravity.CENTER);
+                hintText.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+                box.addView(hintText);
+                hintText.setLeft(0);
+                hintText.setTop(0);
+
+                TextView closeText = new TextView(MainActivity.sharedInstance);
+                closeText.setTextColor(Color.WHITE);
+                closeText.setTextSize(16);
+                closeText.setTypeface(Typeface.DEFAULT_BOLD);
+                closeText.setText("Touch To Close");
+                closeText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+                closeText.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+                box.addView(closeText);
+                closeText.setLeft(0);
+                closeText.setTop(0);
+
+                box.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ConstraintLayout root = (ConstraintLayout) v.getParent();
+                        root.removeView(v);
+                    }
+                });
+            }
+        });
 
 
     }

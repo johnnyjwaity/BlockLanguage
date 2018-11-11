@@ -40,6 +40,7 @@ public class GameplayManager {
 
     private List<Map<QuestionBase, QuestionParameter[]>> questions = new ArrayList<>();
     private String currentAnswer = "";
+    private String currentHint = "";
     private List<String> currValues = new ArrayList<>();
 
     private ProgressBar healthBar;
@@ -113,6 +114,7 @@ public class GameplayManager {
                 QuestionBase base = (QuestionBase) questions.get(currentLevel - 1).keySet().toArray()[(int)(Math.random() * questions.get(currentLevel - 1).size())];
                 String[] question = base.getQuestion(questions.get(currentLevel - 1).get(base));
                 currentAnswer = question[1];
+                currentHint = base.getHint();
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
                 base.setWorkflow();
             }
@@ -140,7 +142,9 @@ public class GameplayManager {
     }
 
 
-
+    public String getHint(){
+        return currentHint;
+    }
 
 
 
@@ -230,7 +234,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "Hint 2";
+                return "Click the white space in the String block to add words";
             }
         });
         QuestionParameter[] params2 = new QuestionParameter[]{new QuestionParameter() {
@@ -264,7 +268,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "Hint 3";
+                return "Click the white space in the Num block to add a number";
             }
         };
         QuestionParameter randNumberParams = new QuestionParameter() {
@@ -299,7 +303,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "Hint 4";
+                return "Click the white space in the Num block to add a number. Click the white space in the String block to add words";
             }
         };
 
@@ -325,7 +329,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "Hint 5";
+                return "You Need a Start Block, Print Block, and String Block";
             }
         };
 
