@@ -33,22 +33,25 @@ public class Interpreter {
 //        console.setText("");
 //        console.bringToFront();
         InlineBlock currentBlock = startBlock;
-        String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a + '\\n';}";
-        while(currentBlock.getSnappedView() != null){
-            currentBlock = currentBlock.getSnappedView();
-            executeStr += currentBlock.getJSValue();
+        if (startBlock == null) {
+            GameplayManager.shared.checkAnswer("");
+        } else {
+            String executeStr = "var PRINT_STR = ''; function print(a){PRINT_STR += a + '\\n';}";
+            while(currentBlock.getSnappedView() != null){
+                currentBlock = currentBlock.getSnappedView();
+                executeStr += currentBlock.getJSValue();
 
-        }
-        executeStr += "PRINT_STR";
+            }
+            executeStr += "PRINT_STR";
 //        System.out.println(executeStr);
-        Context rhino = Context.enter();
-        rhino.setOptimizationLevel(-1);
-        rhino.setLanguageVersion(Context.VERSION_1_2);
-        Scriptable scope = rhino.initStandardObjects();
-        Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
+            Context rhino = Context.enter();
+            rhino.setOptimizationLevel(-1);
+            rhino.setLanguageVersion(Context.VERSION_1_2);
+            Scriptable scope = rhino.initStandardObjects();
+            Object res = rhino.evaluateString(scope, executeStr, "<cmd>", 1, null);
 //        System.out.println("output: " + Context.toString(res)+"\n output done");
-        String result = Context.toString(res);
-        GameplayManager.shared.checkAnswer(result);
+            String result = Context.toString(res);
+            GameplayManager.shared.checkAnswer(result);
 //        timeStart = System.currentTimeMillis() - timeStart;
 //        console.setText(result + "\n      Time Ran: " + ((float)timeStart)/1000 + "s");
 
@@ -60,6 +63,8 @@ public class Interpreter {
 //                    }
 //                },
 //                5000);
+        }
+
     }
 
 

@@ -51,7 +51,7 @@ public abstract class QuestionBase {
                                         last.snapToBlock(first);
                                     }
                                 },
-                                200+index*600);
+                                125+index*200);
                         index++;
 
                     }
@@ -72,7 +72,7 @@ public abstract class QuestionBase {
                                             block.snapToHolder(params.get(block));
                                         }
                                     },
-                                    1300 + (400 * index));
+                                    400 + (200 * index));
 
                             index++;
 

@@ -2,9 +2,11 @@ package Gameplay;
 
 import android.graphics.Color;
 import android.graphics.Path;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 import com.johnnywaity.blocklanguage.R;
@@ -44,6 +46,7 @@ public class GameplayManager {
     private List<String> currValues = new ArrayList<>();
 
     private ProgressBar healthBar;
+    private ImageView star;
     int fuel = 100;
 
     private RelativeLayout background;
@@ -52,7 +55,7 @@ public class GameplayManager {
     private float currentThreshold = 0;
 
 
-    private int currentLevel = 1;
+    private int currentLevel = 3;
 
     public GameplayManager(){
         shared = this;
@@ -62,9 +65,12 @@ public class GameplayManager {
 
         healthBar = MainActivity.sharedInstance.findViewById(R.id.progressBar);
         healthBar.setProgress(fuel);
-
+        star = MainActivity.sharedInstance.findViewById(R.id.star);
+        star.setVisibility(View.INVISIBLE);
         background = MainActivity.sharedInstance.findViewById(R.id.GameView);
 
+        animateStars();
+        animateStarsMain();
         decreaseFuel();
         changeBackground();
 
@@ -80,7 +86,36 @@ public class GameplayManager {
                         decreaseFuel();
                     }
                 },
-        50);
+                700);
+    }
+
+    private void animateStars() {
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        star.setVisibility(View.VISIBLE);
+                        star.setX(100+150*((int) (Math.random()*12)));
+                        star.setY(0);
+                        animateStars();
+                    }
+                },
+                8000);
+    }
+
+    private void animateStarsMain() {
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        MainActivity.sharedInstance.findViewById(R.id.progressLayout).bringToFront();
+                        MainActivity.sharedInstance.findViewById(R.id.imageView).bringToFront();
+                        MainActivity.sharedInstance.findViewById(R.id.questionBox).bringToFront();
+                        star.setY(star.getY()+10);
+                        animateStarsMain();
+                    }
+                },
+                50);
     }
 
     private void changeBackground(){
@@ -134,11 +169,21 @@ public class GameplayManager {
                 correctAnswer += c;
             }
         }
-        if (answer.equalsIgnoreCase(correctAnswer)){
+        System.out.println("correct: "+correctAnswer);
+        System.out.println("Your   : "+answer);
+        if (answer.replace(" ","").equalsIgnoreCase(correctAnswer.replace(" ",""))){
             System.out.println("Correct");
+            fuel += 30;
+            if (fuel > 100) {
+                fuel = 100;
+            }
+            healthBar.setProgress(fuel);
         }else{
             System.out.println("Incorrect");
+            fuel -= 20;
+            healthBar.setProgress(fuel);
         }
+        setQuestion();
     }
 
 
@@ -440,7 +485,7 @@ public class GameplayManager {
 
             @Override
             public String getAnswer(List<String> values) {
-                return ""+(Math.pow(2, Integer.parseInt(currValues.get(0))));
+                return ""+((int)(Math.pow(2, Integer.parseInt(currValues.get(0)))));
             }
 
             @Override
