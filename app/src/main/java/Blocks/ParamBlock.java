@@ -89,7 +89,10 @@ public abstract class ParamBlock extends Block {
     public void snapToHolder(ParameterHolder closestView){
         ParamBlock block = this;
         ViewGroup v = (ViewGroup) block.getParent();
-        v.removeView(block);
+        if(v != null){
+            v.removeView(block);
+        }
+
         int originalBlockWidth = block.getWidth();
         block.setLeft(0);
         block.setX(0);

@@ -29,26 +29,7 @@ public class ElseBlock extends EnclosureBlock {
 
     public static ElseBlock create(InlineBlock[] subBlocks){
         final ElseBlock block = create();
-        final InlineBlock[] subs = subBlocks;
-        final RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        for (InlineBlock b : subs){
-                            final InlineBlock b2 = b;
-                            workflow.addView(b2);
-                            new android.os.Handler().postDelayed(
-                                    new Runnable() {
-                                        public void run() {
-                                            b2.snapToBlock(block.getHolder().getFollowBlock());
-                                        }
-                                    },
-                                    100);
-                        }
-                    }
-                },
-                1000);
-
+        block.setInsidePreset(subBlocks);
         return block;
     }
 }

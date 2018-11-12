@@ -1,6 +1,7 @@
 package Gameplay;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.johnnywaity.blocklanguage.MainActivity;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import Blocks.Block;
+import Blocks.EnclosureBlock;
 import Blocks.InlineBlock;
 import Blocks.ParamBlock;
 import Blocks.ParameterHolder;
@@ -31,61 +33,73 @@ public abstract class QuestionBase {
     }
 
     public void setWorkflow(){
-        MainActivity.sharedInstance.runOnUiThread(new Runnable() {
+        RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
+        workflow.removeAllViews();
+        InlineBlock[] preset = getPreset();
+        placeInlineBlock(0, preset, workflow, true);
+    }
+    private void placeInlineBlock(final int index, final InlineBlock[] preset, final RelativeLayout workflow, final boolean canFinish){
+        new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                final InlineBlock[] blocks = getPreset();
-                final Map<ParamBlock, ParameterHolder> params = getParamPreset(blocks);
-                final RelativeLayout workflow = MainActivity.sharedInstance.findViewById(R.id.Workflow);
-                workflow.removeAllViews();
-                InlineBlock prevBlock = null;
-                int index = 0;
-                for (InlineBlock b : blocks){
-                    workflow.addView(b);
-                    if(prevBlock != null){
-                        final InlineBlock first = prevBlock;
-                        final InlineBlock last = b;
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        last.snapToBlock(first);
-                                    }
-                                },
-                                125+index*200);
-                        index++;
-
+                workflow.addView(preset[index]);
+                if(index > 0){
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            preset[index].snapToBlock(preset[index - 1]);
+                        }
+                    }, 50);
+                    if(preset[index] instanceof EnclosureBlock){
+                        EnclosureBlock b = (EnclosureBlock) preset[index];
+                        InlineBlock[] preset2 = new InlineBlock[b.getInsidePreset().length + 1];
+                        preset2[0] = b.getHolder().getFollowBlock();
+                        for(int i = 0; i < b.getInsidePreset().length; i++){
+                            preset2[i + 1] = b.getInsidePreset()[i];
+                        }
+                        placeInlineBlock(1, preset2, workflow, false);
                     }
-                    prevBlock = b;
                 }
+                if(index + 1 < preset.length){
+                    placeInlineBlock(index + 1, preset, workflow, canFinish);
+                }else if(canFinish){
+                    Map<ParamBlock, ParameterHolder> map = getParamPreset(preset);
+                    ParamBlock[] blocks = new ParamBlock[map.size()];
+                    ParameterHolder[] holders = new ParameterHolder[map.size()];
+                    int index = 0;
+                    for(ParamBlock key : map.keySet()){
+                        blocks[index] = key;
+                        holders[index] = map.get(key);
+                        index ++;
+                    }
 
+                    placeParameter(blocks, holders, 0, workflow);
+                }
+            }
+        }, 100);
+    }
+    private void placeParameter(final ParamBlock[] blocks, final ParameterHolder[] holders, final int index, final RelativeLayout workflow){
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                blocks[index].snapToHolder(holders[index]);
+                ViewGroup parent = (ViewGroup) blocks[index].getParent();
+                if(parent != null){
+                    parent.removeView(blocks[index]);
+                }
+                workflow.addView(blocks[index]);
                 new android.os.Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        int index = 0;
-                        for(ParamBlock b : params.keySet()){
-                            final ParamBlock block = b;
-                            workflow.addView(b);
-                            new android.os.Handler().postDelayed(
-                                    new Runnable() {
-                                        public void run() {
-                                            System.out.println(params.get(block));
-                                            block.snapToHolder(params.get(block));
-                                        }
-                                    },
-                                    400 + (200 * index));
-
-                            index++;
-
-                        }
+                        blocks[index].snapToHolder(holders[index]);
                     }
-                }, 10);
-
-
-
+                }, 50);
+                if(index + 1 < blocks.length){
+                    placeParameter(blocks, holders, index + 1, workflow);
+                }
             }
-        });
+        }, 100);
     }
-
 
     public abstract String setQuestionBase();
     public abstract String getAnswer(List<String> values);

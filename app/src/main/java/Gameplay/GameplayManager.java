@@ -1,7 +1,16 @@
 package Gameplay;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.support.constraint.ConstraintLayout;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -10,6 +19,7 @@ import android.widget.ImageView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 import com.johnnywaity.blocklanguage.R;
+import com.johnnywaity.blocklanguage.TitleActivity;
 
 import org.w3c.dom.Text;
 
@@ -41,6 +51,9 @@ public class GameplayManager {
     public static GameplayManager shared;
 
     private List<Map<QuestionBase, QuestionParameter[]>> questions = new ArrayList<>();
+    private List<Map<QuestionBase, QuestionParameter[]>> bossQuestions = new ArrayList<>();
+    private Drawable[] bosses = new Drawable[]{MainActivity.sharedInstance.getDrawable(R.drawable.overflow)};
+    private String[] bossNames = new String[]{"Overflow"};
     private String currentAnswer = "";
     private String currentHint = "";
     private List<String> currValues = new ArrayList<>();
@@ -56,11 +69,14 @@ public class GameplayManager {
 
 
     private int currentLevel = 3;
+    private int currentAnswerStreak = 0;
+    private boolean isFightingBoss = false;
 
     public GameplayManager(){
         shared = this;
         MainActivity.sharedInstance.populateMenu(currentLevel);
         populateQuestions();
+        populateBossQuestions();
         setQuestion();
 
         healthBar = MainActivity.sharedInstance.findViewById(R.id.progressBar);
@@ -83,7 +99,12 @@ public class GameplayManager {
                     public void run() {
                         fuel -= 1;
                         healthBar.setProgress(fuel);
-                        decreaseFuel();
+                        if(fuel <= 0){
+                            displayLostGame();
+                        }else{
+                            decreaseFuel();
+                        }
+
                     }
                 },
                 700);
@@ -115,7 +136,7 @@ public class GameplayManager {
                         animateStarsMain();
                     }
                 },
-                50);
+                20);
     }
 
     private void changeBackground(){
@@ -146,8 +167,16 @@ public class GameplayManager {
         MainActivity.sharedInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QuestionBase base = (QuestionBase) questions.get(currentLevel - 1).keySet().toArray()[(int)(Math.random() * questions.get(currentLevel - 1).size())];
-                String[] question = base.getQuestion(questions.get(currentLevel - 1).get(base));
+                QuestionBase base;
+                String[] question;
+                if(isFightingBoss){
+                    base = (QuestionBase) bossQuestions.get(currentLevel - 1).keySet().toArray()[(int)(Math.random() * bossQuestions.get(currentLevel - 1).size())];
+                    question = base.getQuestion(bossQuestions.get(currentLevel - 1).get(base));
+                }else{
+                    base = (QuestionBase) questions.get(currentLevel - 1).keySet().toArray()[(int)(Math.random() * questions.get(currentLevel - 1).size())];
+                    question = base.getQuestion(questions.get(currentLevel - 1).get(base));
+                }
+
                 currentAnswer = question[1];
                 currentHint = base.getHint();
                 ((TextView)MainActivity.sharedInstance.findViewById(R.id.questionBox)).setText(question[0]);
@@ -178,12 +207,28 @@ public class GameplayManager {
                 fuel = 100;
             }
             healthBar.setProgress(fuel);
+            currentAnswerStreak += 1;
+            if (currentAnswerStreak >= ((isFightingBoss) ? 1 : 3)){
+                currentAnswerStreak = 0;
+                if(isFightingBoss){
+                    isFightingBoss = false;
+                    currentLevel += 1;
+                    MainActivity.sharedInstance.populateMenu(currentLevel);
+                    ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setImageDrawable(null);
+                }else{
+                    isFightingBoss = true;
+                    displayBossAlert();
+                    ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setImageDrawable(bosses[currentLevel - 1]);
+                }
+            }
+            setQuestion();
         }else{
             System.out.println("Incorrect");
             fuel -= 20;
             healthBar.setProgress(fuel);
+            currentAnswerStreak = 0;
         }
-        setQuestion();
+
     }
 
 
@@ -191,9 +236,103 @@ public class GameplayManager {
         return currentHint;
     }
 
+    private void displayBossAlert(){
+        displayAlert(bossNames[currentLevel - 1] + " Approaches. Defeat Him To Advance!", null);
+    }
+    private void displayLostGame(){
+        displayAlert("You Lost. Better Luck Next Time", new Runnable() {
+            @Override
+            public void run() {
+                Intent t = new Intent(MainActivity.sharedInstance, TitleActivity.class);
+                MainActivity.sharedInstance.startActivity(t);
+            }
+        });
+    }
 
+    private void displayAlert(String message, final Runnable complete){
+        ConstraintLayout root = (ConstraintLayout) MainActivity.sharedInstance.findViewById(R.id.Workflow).getParent();
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        MainActivity.sharedInstance.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+        int width = 800;
+        int height = 350;
 
+        RelativeLayout box = new RelativeLayout(MainActivity.sharedInstance);
+        box.setBackground(MainActivity.sharedInstance.getDrawable(android.R.drawable.alert_dark_frame));
+        box.setBackgroundTintMode(PorterDuff.Mode.SRC_ATOP);
+        box.setBackgroundTintList(ColorStateList.valueOf(MainActivity.sharedInstance.getResources().getColor(android.R.color.holo_orange_light, MainActivity.sharedInstance.getTheme())));
+        box.setLayoutParams(new ConstraintLayout.LayoutParams(width, height));
+        root.addView(box);
+        box.setX((screen_width / 2) - width / 2);
+        box.setY((screen_height / 2) - height / 2);
+
+        TextView hintText = new TextView(MainActivity.sharedInstance);
+        hintText.setTextColor(Color.WHITE);
+        hintText.setTextSize(26);
+        hintText.setTypeface(Typeface.DEFAULT_BOLD);
+        hintText.setText(message);
+        hintText.setGravity(Gravity.CENTER);
+        hintText.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+        box.addView(hintText);
+        hintText.setLeft(0);
+        hintText.setTop(0);
+
+        TextView closeText = new TextView(MainActivity.sharedInstance);
+        closeText.setTextColor(Color.WHITE);
+        closeText.setTextSize(16);
+        closeText.setTypeface(Typeface.DEFAULT_BOLD);
+        closeText.setText("Touch To Close");
+        closeText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        closeText.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+        box.addView(closeText);
+        closeText.setLeft(0);
+        closeText.setTop(0);
+
+        box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConstraintLayout root = (ConstraintLayout) v.getParent();
+                root.removeView(v);
+                if(complete != null){
+                    complete.run();
+                }
+            }
+        });
+    }
+
+    private void populateBossQuestions(){
+        QuestionBase printFight = new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                return "Print Overflow You Will Never Win";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                return "Overflow You Will Never Win";
+            }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                return new InlineBlock[0];
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                return new HashMap<>();
+            }
+
+            @Override
+            public String getHint() {
+                return "You will need a start block, a print block and a string block";
+            }
+        };
+        Map<QuestionBase, QuestionParameter[]> boss1 = new HashMap<>();
+        boss1.put(printFight, new QuestionParameter[0]);
+        bossQuestions.add(boss1);
+    }
 
 
 

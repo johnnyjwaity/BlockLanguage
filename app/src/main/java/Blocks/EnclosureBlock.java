@@ -9,9 +9,12 @@ import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 
+import java.util.List;
+
 public abstract class EnclosureBlock extends InlineBlock {
 
     private InlineHolder holder;
+    private InlineBlock[] insidePreset;
 
     public EnclosureBlock(View[] subviews) {
         super(subviews);
@@ -26,7 +29,13 @@ public abstract class EnclosureBlock extends InlineBlock {
         followThread.start();
     }
 
+    public InlineBlock[] getInsidePreset() {
+        return insidePreset;
+    }
 
+    public void setInsidePreset(InlineBlock[] insidePreset) {
+        this.insidePreset = insidePreset;
+    }
 
     public String getInsideJS(){
         String total = "";

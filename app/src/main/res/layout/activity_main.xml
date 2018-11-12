@@ -135,6 +135,14 @@
             android:layout_width="90dp"
             android:layout_height="100dp"
             app:srcCompat="@drawable/star" />
+
+        <ImageView
+            android:id="@+id/bossview"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="92dp" />
     </RelativeLayout>
 
     <RelativeLayout
