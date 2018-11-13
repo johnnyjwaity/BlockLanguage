@@ -42,39 +42,42 @@ public abstract class QuestionBase {
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                workflow.addView(preset[index]);
-                if(index > 0){
-                    new android.os.Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            preset[index].snapToBlock(preset[index - 1]);
+                if (preset.length > 0) {
+                    workflow.addView(preset[index]);
+                    if(index > 0){
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                preset[index].snapToBlock(preset[index - 1]);
+                            }
+                        }, 50);
+                        if(preset[index] instanceof EnclosureBlock){
+                            EnclosureBlock b = (EnclosureBlock) preset[index];
+                            InlineBlock[] preset2 = new InlineBlock[b.getInsidePreset().length + 1];
+                            preset2[0] = b.getHolder().getFollowBlock();
+                            for(int i = 0; i < b.getInsidePreset().length; i++){
+                                preset2[i + 1] = b.getInsidePreset()[i];
+                            }
+                            placeInlineBlock(1, preset2, workflow, false);
                         }
-                    }, 50);
-                    if(preset[index] instanceof EnclosureBlock){
-                        EnclosureBlock b = (EnclosureBlock) preset[index];
-                        InlineBlock[] preset2 = new InlineBlock[b.getInsidePreset().length + 1];
-                        preset2[0] = b.getHolder().getFollowBlock();
-                        for(int i = 0; i < b.getInsidePreset().length; i++){
-                            preset2[i + 1] = b.getInsidePreset()[i];
+                    }
+                    if(index + 1 < preset.length){
+                        placeInlineBlock(index + 1, preset, workflow, canFinish);
+                    }else if(canFinish){
+                        Map<ParamBlock, ParameterHolder> map = getParamPreset(preset);
+                        ParamBlock[] blocks = new ParamBlock[map.size()];
+                        ParameterHolder[] holders = new ParameterHolder[map.size()];
+                        int index = 0;
+                        for(ParamBlock key : map.keySet()){
+                            blocks[index] = key;
+                            holders[index] = map.get(key);
+                            index ++;
                         }
-                        placeInlineBlock(1, preset2, workflow, false);
-                    }
-                }
-                if(index + 1 < preset.length){
-                    placeInlineBlock(index + 1, preset, workflow, canFinish);
-                }else if(canFinish){
-                    Map<ParamBlock, ParameterHolder> map = getParamPreset(preset);
-                    ParamBlock[] blocks = new ParamBlock[map.size()];
-                    ParameterHolder[] holders = new ParameterHolder[map.size()];
-                    int index = 0;
-                    for(ParamBlock key : map.keySet()){
-                        blocks[index] = key;
-                        holders[index] = map.get(key);
-                        index ++;
-                    }
 
-                    placeParameter(blocks, holders, 0, workflow);
+                        placeParameter(blocks, holders, 0, workflow);
+                    }
                 }
+
             }
         }, 100);
     }

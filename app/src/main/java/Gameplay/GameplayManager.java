@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -28,11 +29,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.logging.Handler;
+import android.os.Handler;
+
 
 import Blocks.Block;
 import Blocks.DeclareVariable;
 import Blocks.ElseBlock;
+import Blocks.EnclosureBlock;
+import Blocks.FalseBlock;
 import Blocks.GetVarBlock;
 import Blocks.IfBlock;
 import Blocks.InlineBlock;
@@ -44,6 +48,7 @@ import Blocks.ParameterHolder;
 import Blocks.PrintBlock;
 import Blocks.StartBlock;
 import Blocks.StringBlock;
+import Blocks.TrueBlock;
 import Blocks.WhileLoop;
 
 public class GameplayManager {
@@ -52,8 +57,8 @@ public class GameplayManager {
 
     private List<Map<QuestionBase, QuestionParameter[]>> questions = new ArrayList<>();
     private List<Map<QuestionBase, QuestionParameter[]>> bossQuestions = new ArrayList<>();
-    private Drawable[] bosses = new Drawable[]{MainActivity.sharedInstance.getDrawable(R.drawable.overflow)};
-    private String[] bossNames = new String[]{"Overflow"};
+    private Drawable[] bosses = new Drawable[]{MainActivity.sharedInstance.getDrawable(R.drawable.overflow), MainActivity.sharedInstance.getDrawable(R.drawable.mutator), MainActivity.sharedInstance.getDrawable(R.drawable.syntax_error)};
+    private String[] bossNames = new String[]{"Overflow", "Mutator", "Syntax Error"};
     private String currentAnswer = "";
     private String currentHint = "";
     private List<String> currValues = new ArrayList<>();
@@ -68,7 +73,7 @@ public class GameplayManager {
     private float currentThreshold = 0;
 
 
-    private int currentLevel = 3;
+    private int currentLevel = 1;
     private int currentAnswerStreak = 0;
     private boolean isFightingBoss = false;
 
@@ -92,6 +97,7 @@ public class GameplayManager {
 
     }
 
+    int i =0;
     private void decreaseFuel() {
 
         new android.os.Handler().postDelayed(
@@ -99,7 +105,8 @@ public class GameplayManager {
                     public void run() {
                         fuel -= 1;
                         healthBar.setProgress(fuel);
-                        if(fuel <= 0){
+                        System.out.println("Fuel: "+fuel+"    i: "+i);
+                        if(fuel <= 0 && i !=0){
                             displayLostGame();
                         }else{
                             decreaseFuel();
@@ -186,6 +193,7 @@ public class GameplayManager {
     }
 
     public void checkAnswer(String input) {
+        i=1;
         String correctAnswer = "";
         String answer = "";
         for(char c : input.toCharArray()){
@@ -213,12 +221,20 @@ public class GameplayManager {
                 if(isFightingBoss){
                     isFightingBoss = false;
                     currentLevel += 1;
+                    displayAlert("Congratulations. You reached level "+currentLevel, null);
                     MainActivity.sharedInstance.populateMenu(currentLevel);
                     ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setImageDrawable(null);
                 }else{
                     isFightingBoss = true;
                     displayBossAlert();
                     ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setImageDrawable(bosses[currentLevel - 1]);
+                    if (currentLevel==2) {
+                        ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setScaleX((float) 1.4);
+                        ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setScaleY((float) 1.4);
+                    } else {
+                        ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setScaleX(1);
+                        ((ImageView)MainActivity.sharedInstance.findViewById(R.id.bossview)).setScaleY(1);
+                    }
                 }
             }
             setQuestion();
@@ -240,6 +256,7 @@ public class GameplayManager {
         displayAlert(bossNames[currentLevel - 1] + " Approaches. Defeat Him To Advance!", null);
     }
     private void displayLostGame(){
+        System.out.println("Fuel: "+fuel);
         displayAlert("You Lost. Better Luck Next Time", new Runnable() {
             @Override
             public void run() {
@@ -306,12 +323,12 @@ public class GameplayManager {
         QuestionBase printFight = new QuestionBase() {
             @Override
             public String setQuestionBase() {
-                return "Print Overflow You Will Never Win";
+                return "Print Overflow";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return "Overflow You Will Never Win";
+                return "Overflow";
             }
 
             @Override
@@ -332,6 +349,97 @@ public class GameplayManager {
         Map<QuestionBase, QuestionParameter[]> boss1 = new HashMap<>();
         boss1.put(printFight, new QuestionParameter[0]);
         bossQuestions.add(boss1);
+
+        QuestionBase xPlusY = new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 5) + 6));
+                currValues.add(""+((int)(Math.random() * 5) + 1));
+                return "Print x plus y";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                return Integer.parseInt(currValues.get(0))+Integer.parseInt(currValues.get(1))+"";
+            }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                DeclareVariable b2 = DeclareVariable.create();
+                b2.changeVariableName("y");
+                return new InlineBlock[]{StartBlock.create(), b, b2};
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                NumBlock numB = NumBlock.create();
+                numB.setValue(Integer.parseInt(currValues.get(0)));
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
+
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(Integer.parseInt(currValues.get(1)));
+                map.put(numB2, inlineBlocks[2].getHolderList().get(0));
+//                map.put(GetVarBlock.create(), b.getHolderList().get(0));
+//                map.put(NumBlock.create(), b.getHolderList().get(1));
+                return map;
+            }
+            @Override
+            public String getHint() {
+                return "You will need an extra print block and operator block";
+            }
+        };
+        Map<QuestionBase, QuestionParameter[]> boss2 = new HashMap<>();
+        boss2.put(xPlusY, new QuestionParameter[]{});
+        bossQuestions.add(boss2);
+
+        QuestionBase xGreaterThanY = new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                currValues = new ArrayList<>();
+                currValues.add(""+((int)(Math.random() * 10) + 1));
+                currValues.add(""+((int)(Math.random() * 10) + 1));
+                return "Print True if x > y. Else, print False";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                return (Integer.parseInt(currValues.get(0))>Integer.parseInt(currValues.get(1)))+"";
+            }
+
+            @Override
+            public InlineBlock[] getPreset() {
+                DeclareVariable b = DeclareVariable.create();
+                b.changeVariableName("x");
+                DeclareVariable b2 = DeclareVariable.create();
+                b2.changeVariableName("y");
+                return new InlineBlock[]{StartBlock.create(), b, b2, IfBlock.create(new InlineBlock[]{PrintBlock.create()}), ElseBlock.create(new InlineBlock[]{PrintBlock.create()})};
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                NumBlock numB = NumBlock.create();
+                numB.setValue(Integer.parseInt(currValues.get(0)));
+                map.put(numB, inlineBlocks[1].getHolderList().get(0));
+                NumBlock numB2 = NumBlock.create();
+                numB2.setValue(Integer.parseInt(currValues.get(1)));
+                map.put(numB2, inlineBlocks[2].getHolderList().get(0));
+
+                return map;
+            }
+            @Override
+            public String getHint() {
+                return "You need a Logic block and True and Else blocks";
+            }
+        };
+
+        Map<QuestionBase, QuestionParameter[]> boss3 = new HashMap<>();
+        boss3.put(xGreaterThanY, new QuestionParameter[]{});
+        bossQuestions.add(boss3);
     }
 
 
@@ -421,12 +529,19 @@ public class GameplayManager {
                 return "Click the white space in the String block to add words";
             }
         });
-        QuestionParameter[] params2 = new QuestionParameter[]{new QuestionParameter() {
+        QuestionParameter randStringParam = new QuestionParameter() {
             @Override
             public String getValue() {
-                return "Hello World";
+                final ArrayList<String> strings = new ArrayList<>();
+                strings.add("Hello World");
+                strings.add("abc");
+                strings.add("Hi");
+                strings.add("dog");
+                strings.add("cat");
+                strings.add("phone");
+                return strings.get(((int) (Math.random()*strings.size())));
             }
-        }};
+        };
 
         QuestionBase printRandNumber = new QuestionBase() {
             @Override
@@ -465,12 +580,12 @@ public class GameplayManager {
         QuestionBase printNumberAndString = new QuestionBase() {
             @Override
             public String setQuestionBase() {
-                return "Print <p0> and then print Hello World";
+                return "Print <p0> and then print <p1>";
             }
 
             @Override
             public String getAnswer(List<String> values) {
-                return values.get(0)+"\n Hello World";
+                return values.get(0)+"\n "+values.get(1);
             }
 
             @Override
@@ -518,10 +633,10 @@ public class GameplayManager {
         };
 
         questions.add(new HashMap<QuestionBase, QuestionParameter[]>());
-        questions.get(0).put(b2, params2);
+        questions.get(0).put(b2, new QuestionParameter[]{randStringParam});
         questions.get(0).put(printRandNumber, new QuestionParameter[]{randNumberParams});
-        questions.get(0).put(printNumberAndString, new QuestionParameter[]{randNumberParams});
-        questions.get(0).put(printHelloWorldSelf, new QuestionParameter[]{});
+        questions.get(0).put(printNumberAndString, new QuestionParameter[]{randNumberParams, randStringParam});
+//        questions.get(0).put(printHelloWorldSelf, new QuestionParameter[]{});
 
         QuestionBase varTimesNum = new QuestionBase() {
             @Override
@@ -558,7 +673,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "";
+                return "Remember to change the + operator to a * operator for multiplication";
             }
         };
         QuestionParameter randNumberParams10 = new QuestionParameter() {
@@ -604,13 +719,13 @@ public class GameplayManager {
 
                 OperatorBlock b = OperatorBlock.create();
                 map.put(b, inlineBlocks[3].getHolderList().get(0));
-//                map.put(GetVarBlock.create(), b.getHolderList().get(0));
+                map.put(GetVarBlock.create(), b.getHolderList().get(0));
 //                map.put(NumBlock.create(), b.getHolderList().get(1));
                 return map;
             }
             @Override
             public String getHint() {
-                return "";
+                return "You need one more getVar block. Remember to change the operator to a - symbol";
             }
         };
 
@@ -647,7 +762,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "";
+                return "You need a getVar block. Also, remember to change the operator to a ^.";
             }
         };
 
@@ -692,7 +807,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "";
+                return "You need two getVar blocks and a Num block";
             }
         };
 
@@ -739,7 +854,7 @@ public class GameplayManager {
             }
             @Override
             public String getHint() {
-                return "";
+                return "You need a true block and a false block. Remember to change the 'and' to a ==";
             }
         };
 
@@ -788,20 +903,62 @@ public class GameplayManager {
                 NumBlock numB2 = NumBlock.create();
                 numB2.setValue(Integer.parseInt(currValues.get(2)));
                 map.put(numB2, b.getHolderList().get(1));
-                NumBlock numB3 = NumBlock.create();
-                numB3.setValue(Integer.parseInt(currValues.get(1)));
-                map.put(numB3, opB.getHolderList().get(1));
+                map.put(TrueBlock.create(), ((EnclosureBlock)inlineBlocks[2]).getInsidePreset()[0].getHolderList().get(0));
+                map.put(FalseBlock.create(), ((EnclosureBlock)inlineBlocks[3]).getInsidePreset()[0].getHolderList().get(0));
+//                NumBlock numB3 = NumBlock.create();
+//                numB3.setValue(Integer.parseInt(currValues.get(1)));
+//                map.put(numB3, opB.getHolderList().get(1));
                 return map;
             }
             @Override
             public String getHint() {
-                return "";
+                return "You need an extra numBlock. Remember to change values of the two operators.";
             }
         };
 
+        QuestionBase printTueAndTrueOrFalse = (new QuestionBase() {
+            @Override
+            public String setQuestionBase() {
+                return "Print the value of \"<p0>\"";
+            }
+
+            @Override
+            public String getAnswer(List<String> values) {
+                return "True";
+            }
+
+
+            @Override
+            public InlineBlock[] getPreset() {
+                return new InlineBlock[]{StartBlock.create(), PrintBlock.create()};
+            }
+
+            @Override
+            public Map<ParamBlock, ParameterHolder> getParamPreset(InlineBlock[] inlineBlocks) {
+                Map<ParamBlock, ParameterHolder> map = new HashMap<>();
+                LogicBlock b = LogicBlock.create();
+                map.put(b, inlineBlocks[1].getHolderList().get(0));
+                map.put(LogicBlock.create(), b.getHolderList().get(1));
+                return map;
+            }
+            @Override
+            public String getHint() {
+                return "Remember to change the second 'and' to an 'or'";
+            }
+        });
+        QuestionParameter[] boolAlgebraParams = new QuestionParameter[]{new QuestionParameter() {
+            @Override
+            public String getValue() {
+                return "True and (True or False)";
+            }
+        }};
+
         questions.add(new HashMap<QuestionBase, QuestionParameter[]>());
-//        questions.get(2).put(printTrueFalseIfXEqualsNum, new QuestionParameter[]{randNumberParams3or4});
+        questions.get(2).put(printTueAndTrueOrFalse, boolAlgebraParams);
+        questions.get(2).put(printTrueFalseIfXEqualsNum, new QuestionParameter[]{randNumberParams3or4});
         questions.get(2).put(printIfXTimesNumGreaterThanNum, new QuestionParameter[]{randNumberParams10, randNumberParams10});
+
+
 
 
     }

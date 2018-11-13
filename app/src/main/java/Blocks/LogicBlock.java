@@ -2,9 +2,11 @@ package Blocks;
 
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.johnnywaity.blocklanguage.MainActivity;
 
@@ -36,8 +38,10 @@ public class LogicBlock extends ParamBlock {
         ParameterHolder value1 = new ParameterHolder(height);
         ParameterHolder value2 = new ParameterHolder(height);
 
-        Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
-        String[] items = new String[]{"&&", "||", "==", "!=", ">", ">=", "<", "<="};
+        final Spinner op = new Spinner(MainActivity.sharedInstance.getBaseContext());
+        op.setScaleX(1.3f);
+        op.setScaleY(1.3f);
+        String[] items = new String[]{"and", "or", "==", "!=", ">", ">=", "<", "<="};
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(120, 52);
         params.setMargins(0, 0, 0 , 0);
@@ -50,6 +54,13 @@ public class LogicBlock extends ParamBlock {
         n.setOperator(op);
         n.addParamHolder(value1);
         n.addParamHolder(value2);
+
+        op.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ((TextView) op.getSelectedView()).setTextColor(Color.WHITE);
+            }
+        });
         return n;
     }
 
@@ -57,6 +68,13 @@ public class LogicBlock extends ParamBlock {
 
     @Override
     public String getJSValue() {
-        return p1.getJSValue() + " " + operator.getSelectedItem().toString() + " " + p2.getJSValue();
+        String op = operator.getSelectedItem().toString();
+        if (op.equals("and")) {
+            op = "&&";
+        } else if (op.equals("or")) {
+            op = "||";
+        }
+
+        return p1.getJSValue() + " " + op + " " + p2.getJSValue();
     }
 }
